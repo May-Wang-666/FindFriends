@@ -1,0 +1,12 @@
+
+server:
+  port: 8080
+
+#neo4j 数据库配置
+spring:
+  data:
+    neo4j:
+      #uri: bolt://47.100.226.85:7687
+      uri: http://47.100.226.85:7474
+      username: neo4j
+      password: neo4j123
