@@ -2,11 +2,10 @@ package cn.edu.zju.socialnetwork.repository;
 
 import cn.edu.zju.socialnetwork.entity.User;
 import org.springframework.data.neo4j.annotation.Query;
+import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.neo4j.repository.*;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 @Repository
@@ -20,5 +19,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
     @Query("match (p:User) return p")
     List<User> getAllUser();
+
+
 
 }
