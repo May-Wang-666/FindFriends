@@ -2,10 +2,14 @@ package cn.edu.zju.socialnetwork.service.impl;
 
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
+import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
+import cn.edu.zju.socialnetwork.response.HomePageInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 @Service
@@ -14,54 +18,43 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
-    public String addUser(User user) {
+    private String defaultHeadpic = "/headpics/default_headpic.png";
 
-        // 账户为空，不允许添加
-        if(user.getAccount() == null || user.getAccount().equals("")){
-            System.out.println("账户为空");
-            return "empty account";
+
+    /**
+     * 用户注册
+     * 相同邮箱不允许重复注册
+     * @param userInfo 传进的参数
+     * @return
+     */
+    @Override
+    public String register(RegisterUserInfo userInfo) {
+        String account = userInfo.getEmail();
+        // 相同邮箱不允许重复注册
+        if(userRepository.findByEmail(account) != null){
+            return "invalid email";
         }
-        // 密码为空，不允许添加
-        if (user.getPassword() == null || user.getPassword().equals("")){
-            System.out.println("密码为空");
-            return "empty password";
+        String localHost = "";
+        try {
+            localHost = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            System.out.println("获取本机ip失败");
+            e.printStackTrace();
+            return "internal error";
         }
-        // 判断如果用户账户已存在，不允许添加
-        String account = user.getAccount();
-        List<User> userList = userRepository.getAllUser();
-        for (User existedUser:userList){
-            if (existedUser.getAccount().equals(account)){
-                System.out.println("账户已存在，添加失败！");
-                return "user account already exists";
-            }
-        }
-        userRepository.save(user);
-        return "user added";
+        String headpic = "http://"+localHost+":8080"+defaultHeadpic;
+        User newUser = new User(userInfo.getEmail(),userInfo.getPassword(),userInfo.getNickname(),headpic,userInfo.getMotto(),userInfo.getSex(),userInfo.getAge(),userInfo.getXinzuo());
+        userRepository.save(newUser);
+        return "success";
     }
 
     @Override
-    public List<User> getUserByName(String name) {
-        return userRepository.findByName(name);
-    }
-
-    @Override
-    public User getUserByAccount(String account) {
-        return userRepository.findByAccount(account);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.getAllUser();
-    }
-
-    @Override
-    public User modifyName(String account, String newName) {
+    public String login(String account, String password) {
         return null;
     }
 
     @Override
-    public User modifyPassword(String account, String newPassword) {
+    public HomePageInfo getUserInfo(String account) {
         return null;
     }
 }
