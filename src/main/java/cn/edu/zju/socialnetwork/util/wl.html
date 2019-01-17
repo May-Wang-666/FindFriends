@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WL</title>
+    <script src="js/bootstrap/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<script>
+    // (async function () {
+    //     let data = {"email":"sl@wlws.com","password":"123456"};
+    //     const defaultHeaders = {
+    //         'Content-Type': 'application/json'
+    //     };
+    //     let req = new Request(`http://192.168.1.101:8080/user/login`, {
+    //         method: "POST",
+    //         headers: defaultHeaders,
+    //         body: JSON.stringify(data),
+    //         withCredentials: true
+    //     });
+    //
+    //     req.withCredentials=true;
+    //     const res = await fetch(req);
+    //     // const dataset = await res.json();
+    //     // console.log(dataset);
+    // })();
+    $.ajax({
+        type: "post",
+        url: 'http://192.168.1.101:8080/user/login',
+        xhrFields:{withCredentials: true},
+        async: true, // 使用同步方式
+        data: JSON.stringify({"email":"sl@wlws.com","password":"123456"}),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data) {
+            alert(data.result);
+        }
+    });
+
+</script>
+</body>
+</html>

@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
+//@CrossOrigin(origins = {"http://192.168.1.106:63342"},allowCredentials = "true" ,maxAge = 3600)
 public class UserController {
 
     @Autowired
@@ -84,6 +84,5 @@ public class UserController {
         }
         return;
     }
-
 
 }

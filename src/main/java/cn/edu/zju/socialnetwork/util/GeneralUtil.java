@@ -10,9 +10,9 @@ public class GeneralUtil {
 
     public static String getCurrentUserFromCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-       // System.out.println(cookies.length);
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
+                System.out.println(cookie.getValue());
                 if (cookie.getName().equals("loginAccount")) {
                     return cookie.getValue();
                 }

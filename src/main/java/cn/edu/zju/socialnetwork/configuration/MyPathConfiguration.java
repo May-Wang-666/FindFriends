@@ -1,4 +1,4 @@
-package cn.edu.zju.configuration;
+package cn.edu.zju.socialnetwork.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

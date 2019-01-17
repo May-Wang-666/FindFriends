@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/look")
-@CrossOrigin
+//@CrossOrigin
 public class GeneralController {
 
     @Autowired
