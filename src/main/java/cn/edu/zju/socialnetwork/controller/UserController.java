@@ -2,10 +2,7 @@ package cn.edu.zju.socialnetwork.controller;
 
 import cn.edu.zju.socialnetwork.request.LoginInfo;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
-import cn.edu.zju.socialnetwork.response.MessageWithLike;
-import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.UserService;
-import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -14,11 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-
 @RestController
 @RequestMapping("/user")
-//@CrossOrigin(origins = {"http://192.168.1.106:63342"},allowCredentials = "true" ,maxAge = 3600)
 public class UserController {
 
     @Autowired
