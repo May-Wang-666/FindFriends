@@ -1,3 +1,9 @@
+package cn.edu.zju.configuration;
 
-// 跨域访问配置
 
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class CORSConfiguration {
+    
+}

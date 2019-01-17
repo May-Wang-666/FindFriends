@@ -7,44 +7,43 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 @NodeEntity
-public class Moment {
+public class Message {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    // 内容
-    private String content;
-    // 发表时间
+    // 留言内容
+    private String text;
+    // 留言时间
     private String time;
-    // 内容图片
-    private String pic;
 
-    @Relationship(type = "belongs_to", direction = Relationship.OUTGOING)
+    // 留言者
+    @Relationship(type = "leaves", direction = Relationship.INCOMING)
     private User owner;
 
+    // 喜欢这个留言的人
     @Relationship(type = "liked", direction = Relationship.INCOMING)
     private Set<User> likedBy;
 
-    public Moment() {
+
+    public Message() {
     }
 
-    public Moment(String content, String time, String pic) {
-        this.content = content;
+    public Message(String text, String time) {
+        this.text = text;
         this.time = time;
-        this.pic = pic;
     }
 
-    public Moment(String content, String time, String pic, User owner) {
-        this.content = content;
+    public Message(String text, String time, User owner) {
+        this.text = text;
         this.time = time;
-        this.pic = pic;
         this.owner = owner;
     }
+
 
     // 用户点赞
     public void likedByUser(User user) {
@@ -54,7 +53,7 @@ public class Moment {
         likedBy.add(user);
     }
 
-    // 取消点赞，从点赞集合中删除该用户
+    // 用户取消点赞
     public void cancledLikeBy(String userAccount) {
         Iterator<User> iterator = likedBy.iterator();
         while (iterator.hasNext()) {
@@ -65,52 +64,43 @@ public class Moment {
         }
     }
 
-    public int getLikeCount() {
-        if (likedBy != null) {
+    public int getLikeCount(){
+        if (likedBy != null){
             return likedBy.size();
-        } else {
-            return 0;
         }
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User owner) {
-        this.owner = owner;
+        else return 0;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getContent() {
-        return content;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
     }
 
     public String getTime() {
         return time;
     }
 
-    public String getPic() {
-        return pic;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public void setTime(String time) {
         this.time = time;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public Set<User> getLikedBy() {
@@ -121,22 +111,12 @@ public class Moment {
         this.likedBy = likedBy;
     }
 
-    public Moment(Long id, String content, String time, String pic, User owner, Set<User> likedBy) {
-        this.id = id;
-        this.content = content;
-        this.time = time;
-        this.pic = pic;
-        this.owner = owner;
-        this.likedBy = likedBy;
-    }
-
     @Override
     public String toString() {
-        return "Moment{" +
+        return "Message{" +
                 "id=" + id +
-                ", content='" + content + '\'' +
+                ", text='" + text + '\'' +
                 ", time='" + time + '\'' +
-                ", pic='" + pic + '\'' +
                 ", owner=" + owner +
                 ", likedBy=" + likedBy +
                 '}';

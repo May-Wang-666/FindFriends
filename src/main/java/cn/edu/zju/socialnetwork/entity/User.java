@@ -2,6 +2,8 @@ package cn.edu.zju.socialnetwork.entity;
 
 import org.neo4j.ogm.annotation.*;
 
+import java.util.*;
+
 @NodeEntity
 public class User {
 
@@ -13,7 +15,7 @@ public class User {
     // 密码
     private String password;
     // 昵称
-    private String nickname;
+    private String name;
     // 头像
     private String headpic;
     // 个性签名
@@ -25,19 +27,75 @@ public class User {
     // 星座
     private String xinzuo;
 
+    @Relationship(value = "is_friends_with", type = Relationship.UNDIRECTED)
+    private Set<User> friends;
+
+    // 收到的留言
+    @Relationship(value = "have", type = Relationship.INCOMING)
+    private List<Message> messages;
+
 
     public User() {
     }
 
-    public User( String email, String password, String nickname, String headpic, String motto, String sex, int age, String xinzuo) {
+    public User(String email, String password, String name, String headpic, String motto, String sex, int age, String xinzuo) {
         this.email = email;
         this.password = password;
-        this.nickname = nickname;
+        this.name = name;
         this.headpic = headpic;
         this.motto = motto;
         this.sex = sex;
         this.age = age;
         this.xinzuo = xinzuo;
+        friends = new HashSet<>();
+    }
+
+    public User(Long id, String email, String password, String name, String headpic, String motto, String sex, int age, String xinzuo, Set<User> friends) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.headpic = headpic;
+        this.motto = motto;
+        this.sex = sex;
+        this.age = age;
+        this.xinzuo = xinzuo;
+        this.friends = friends;
+    }
+
+    // 相互加好友
+    public void makeFriendsWith(User user) {
+        friends.add(user);
+        user.getFriends().add(this);
+    }
+
+    // 获得一个留言
+    public void addMessage(Message message){
+        if (messages == null){
+            messages = new ArrayList<>();
+        }
+        messages.add(message);
+    }
+
+    // 删除一条留言
+    public void removeMessage(Message message){
+        Iterator<Message> iterator = messages.iterator();
+        while (iterator.hasNext()){
+            Message tmp = iterator.next();
+            if (tmp.getId() == message.getId()){
+                iterator.remove();
+                break;
+            }
+        }
+        System.out.println("找不到id为 "+message.getId()+" 的留言");
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     public Long getId() {
@@ -52,8 +110,8 @@ public class User {
         return password;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getName() {
+        return name;
     }
 
     public String getHeadpic() {
@@ -76,6 +134,10 @@ public class User {
         return xinzuo;
     }
 
+    public Set<User> getFriends() {
+        return friends;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -88,8 +150,8 @@ public class User {
         this.password = password;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setHeadpic(String headpic) {
@@ -112,18 +174,23 @@ public class User {
         this.xinzuo = xinzuo;
     }
 
+    public void setFriends(Set<User> friends) {
+        this.friends = friends;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", name='" + name + '\'' +
                 ", headpic='" + headpic + '\'' +
                 ", motto='" + motto + '\'' +
                 ", sex='" + sex + '\'' +
                 ", age=" + age +
                 ", xinzuo='" + xinzuo + '\'' +
+                ", friends=" + friends +
                 '}';
     }
 }

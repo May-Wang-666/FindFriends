@@ -1,10 +1,15 @@
 package cn.edu.zju.socialnetwork.response;
 
 import cn.edu.zju.socialnetwork.entity.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Getter
+@Setter
 public class HomePageInfo {
 
     // 个人信息
@@ -14,18 +19,27 @@ public class HomePageInfo {
     // 统计信息
     private StaticInfo statics;
     // 动态列表
-    private List<ResponseMoment> dongtailist;
+    private List<MomentWithLike> dongtailist;
+    // 是否最后一页，默认为false
+    private boolean isLastPageOfMoment;
 
-    // 传入当前用户、好友用户列表、动态数、留言数、本人留言列表
-    public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<ResponseMoment> moments) {
-        personal = new Person(user.getNickname(), user.getHeadpic(), user.getMotto(), user.getSex(), user.getAge(), user.getXinzuo(), user.getEmail());
+    // 传入当前用户、好友用户列表、动态数、留言数、动态列表
+    public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<MomentWithLike> moments) {
+        personal = new Person(user.getName(), user.getHeadpic(), user.getMotto(), user.getSex(), user.getAge(), user.getXinzuo(), user.getEmail());
         friends = new ArrayList<>();
-        for(User friend:friendList){
-            Friend tmp = new Friend(friend.getNickname(),friend.getEmail(),friend.getHeadpic());
-            friends.add(tmp);
+        if (friendList != null){
+            for(User friend:friendList){
+                Friend tmp = new Friend(friend.getName(),friend.getEmail(),friend.getHeadpic());
+                friends.add(tmp);
+            }
         }
         statics = new StaticInfo(numOfMoments, numOfMessages);
         dongtailist = moments;
+        isLastPageOfMoment = false;
+    }
+
+    public void setLastPageOfMoment(boolean lastPageOfMoment) {
+        isLastPageOfMoment = lastPageOfMoment;
     }
 
     private class Person {
@@ -99,5 +113,15 @@ public class HomePageInfo {
             this.dongtai = dongtai;
             this.liuyan = liuyan;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "HomePageInfo{" +
+                "personal=" + personal +
+                ", friends=" + friends +
+                ", statics=" + statics +
+                ", dongtailist=" + dongtailist +
+                '}';
     }
 }
