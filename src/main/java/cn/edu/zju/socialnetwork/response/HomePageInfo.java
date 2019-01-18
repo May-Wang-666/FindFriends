@@ -53,6 +53,7 @@ public class HomePageInfo {
         isLastPageOfMoment = lastPageOfMoment;
     }
 
+    @Getter
     private static class Person {
         private String nickname;
         private String headpic;
@@ -74,36 +75,9 @@ public class HomePageInfo {
             this.xinzuo = xinzuo;
             this.email = email;
         }
-
-        public void setNickname(String nickname) {
-            this.nickname = nickname;
-        }
-
-        public void setHeadpic(String headpic) {
-            this.headpic = headpic;
-        }
-
-        public void setMotto(String motto) {
-            this.motto = motto;
-        }
-
-        public void setSex(String sex) {
-            this.sex = sex;
-        }
-
-        public void setAge(int age) {
-            this.age = age;
-        }
-
-        public void setXinzuo(String xinzuo) {
-            this.xinzuo = xinzuo;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
     }
 
+    @Getter
     private static class Friend{
         private String nickname;
         private String email;
@@ -118,6 +92,7 @@ public class HomePageInfo {
         }
     }
 
+    @Getter
     private static class StaticInfo {
         private int dongtai;
         private int liuyan;
