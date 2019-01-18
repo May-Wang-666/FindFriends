@@ -1,6 +1,11 @@
 package cn.edu.zju.socialnetwork.response;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 // 包含了当前用户是否点赞的动态信息
 public class MomentWithLike {
 
