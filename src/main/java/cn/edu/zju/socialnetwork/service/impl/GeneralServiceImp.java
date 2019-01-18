@@ -41,7 +41,6 @@ public class GeneralServiceImp implements GeneralService {
     @Override
     public HomePageInfo getHomePage(String ownerAccount, String visitorAccount) {
         User owner = userRepository.findByEmail(ownerAccount);
-        System.out.println(owner);
         User visitor = userRepository.findByEmail(visitorAccount);
         // 用户的好友列表
         Set<User> friends = owner.getFriends();
@@ -78,6 +77,7 @@ public class GeneralServiceImp implements GeneralService {
         if (momentWithLikes.size() <= 10){
             info.setLastPageOfMoment(true);
         }
+        System.out.println(info);
         return info;
     }
 }

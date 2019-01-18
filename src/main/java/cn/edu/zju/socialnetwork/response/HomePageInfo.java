@@ -23,6 +23,9 @@ public class HomePageInfo {
     // 是否最后一页，默认为false
     private boolean isLastPageOfMoment;
 
+
+    public HomePageInfo(){}
+
     // 传入当前用户、好友用户列表、动态数、留言数、动态列表
     public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<MomentWithLike> moments) {
         personal = new Person(user.getName(), user.getHeadpic(), user.getMotto(), user.getSex(), user.getAge(), user.getXinzuo(), user.getEmail());
@@ -38,11 +41,19 @@ public class HomePageInfo {
         isLastPageOfMoment = false;
     }
 
+    public HomePageInfo(Person personal, List<Friend> friends, StaticInfo statics, List<MomentWithLike> dongtailist, boolean isLastPageOfMoment) {
+        this.personal = personal;
+        this.friends = friends;
+        this.statics = statics;
+        this.dongtailist = dongtailist;
+        this.isLastPageOfMoment = isLastPageOfMoment;
+    }
+
     public void setLastPageOfMoment(boolean lastPageOfMoment) {
         isLastPageOfMoment = lastPageOfMoment;
     }
 
-    private class Person {
+    private static class Person {
         private String nickname;
         private String headpic;
         private String motto;
@@ -93,10 +104,12 @@ public class HomePageInfo {
         }
     }
 
-    private class Friend{
+    private static class Friend{
         private String nickname;
         private String email;
         private String headpic;
+
+        public Friend(){}
 
         public Friend(String nickname, String email, String headpic) {
             this.nickname = nickname;
@@ -105,9 +118,11 @@ public class HomePageInfo {
         }
     }
 
-    private class StaticInfo {
+    private static class StaticInfo {
         private int dongtai;
         private int liuyan;
+
+        public StaticInfo(){}
 
         public StaticInfo(int dongtai, int liuyan) {
             this.dongtai = dongtai;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping(value = "/look")
@@ -25,12 +26,16 @@ public class GeneralController {
     GeneralService generalService;
 
     @RequestMapping(value = "/homepage")
-    public HomePageInfo homePage(@RequestBody String owner, HttpServletRequest request){
+    public HomePageInfo homePage(@RequestBody HashMap<String,String> data, HttpServletRequest request){
+        String owner = data.get("owner");
         System.out.println("收到homepage请求：");
+        System.out.println("主页的主人是："+owner);
         String visitor = GeneralUtil.getCurrentUserFromCookie(request);
         System.out.println(visitor);
         if (visitor.equals("please login first")){
             return null;
+        } else {
+            System.out.println("从cookie中获取的账号："+visitor);
         }
         return generalService.getHomePage(owner,visitor);
     }
