@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MessageWithLike {
+public class AdditionalMessage {
 
     private Long id;
     // 留言者昵称
@@ -20,17 +20,20 @@ public class MessageWithLike {
     private int like;
     // 当前访问者是否点赞
     private boolean liked;
+    // 当前访问者是否可以删除
+    private boolean isDeletable;
 
-    public MessageWithLike() {
+    public AdditionalMessage() {
     }
 
-    public MessageWithLike(Long id, String nick, String headpic, String text, String time) {
+    public AdditionalMessage(Long id, String nick, String headpic, String text, String time) {
         this.id = id;
         this.nick = nick;
         this.headpic = headpic;
         this.text = text;
         this.time = time;
         this.liked = false;
+        this.isDeletable = false;
         this.like = 0;
     }
 
@@ -40,5 +43,9 @@ public class MessageWithLike {
 
     public void setLiked(boolean liked) {
         this.liked = liked;
+    }
+
+    public void setDeletable(boolean deletable) {
+        isDeletable = deletable;
     }
 }

@@ -11,10 +11,10 @@ import java.util.List;
 public class ResponseMessages {
 
     private UserInfo ownerInfo;
-    private List<MessageWithLike> messages;
+    private List<AdditionalMessage> messages;
     private int totalMessages;
 
-    public ResponseMessages(String name, String headpic, List<MessageWithLike> messages, int totalMessages) {
+    public ResponseMessages(String name, String headpic, List<AdditionalMessage> messages, int totalMessages) {
         System.out.println("用户名："+name);
         System.out.println("头像："+headpic);
         ownerInfo = new UserInfo(name, headpic);

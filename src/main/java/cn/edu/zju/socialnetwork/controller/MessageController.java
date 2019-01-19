@@ -1,8 +1,12 @@
 package cn.edu.zju.socialnetwork.controller;
 
-import cn.edu.zju.socialnetwork.request.MessageInfo;
-import cn.edu.zju.socialnetwork.response.ResponseMoments;
+import cn.edu.zju.socialnetwork.entity.Message;
+import cn.edu.zju.socialnetwork.entity.User;
+import cn.edu.zju.socialnetwork.response.AdditionalMessage;
+import cn.edu.zju.socialnetwork.response.ResponseMessages;
+import cn.edu.zju.socialnetwork.service.GeneralService;
 import cn.edu.zju.socialnetwork.service.MessageService;
+import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/message")
@@ -20,32 +25,37 @@ public class MessageController {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    GeneralService generalService;
+
+    @Autowired
+    UserService userService;
+
     // 发表留言或者请求第n页留言
     @RequestMapping(value = "/refresh")
-    public ResponseMoments momentRefresh(@RequestBody HashMap<String,String> data){
+    public ResponseMessages momentRefresh(@RequestBody HashMap<String, String> data, HttpServletRequest request) {
+        String reqMethod = request.getMethod();
+        // 发表留言
+        if (reqMethod.equals(String.valueOf(RequestMethod.POST))) {
+            String toAccount = data.get("toAccount");
+            String text = data.get("text");
+            String time = String.valueOf(System.currentTimeMillis());
+            String fromAccount = GeneralUtil.getCurrentUserFromCookie(request);
+            messageService.leaveMessage(fromAccount, toAccount, text, time);
+            return generalService.getMessagePage(toAccount, fromAccount);
+           /*
+           List<Message> newMessages = messageService.findMessagesByAccount(toAccount,1);
+           User owner = userService.findByAccount(toAccount);
+            User visitor = userService.findByAccount(fromAccount);
+            return GeneralUtil.addInfoIntoMessages(newMessages,owner,visitor);*/
+        }
         return null;
     }
 
-    // 发表留言
-    @RequestMapping(value = "/publish",method = RequestMethod.POST)
-    public String publish(@RequestBody MessageInfo info, HttpServletRequest request){
-        // 获取当前登录状态
-        String fromAccount = GeneralUtil.getCurrentUserFromCookie(request);
-        if (fromAccount.equals("no corresponding cookie")){
-            return "please login first";
-        }
-        String toAccount = info.getToAccount();
-        String text = info.getText();
-        String time = info.getTime();
-        if (time == null || time.equals("")){
-            time = String.valueOf(System.currentTimeMillis());
-        }
-        return messageService.leaveMessage(fromAccount,toAccount,text,time);
-    }
 
     // 删除留言
     @RequestMapping(value = "/delete")
-    public String delete(@RequestBody String id){
+    public String delete(@RequestBody String id) {
         return messageService.deleteMessage(Long.parseLong(id));
     }
 

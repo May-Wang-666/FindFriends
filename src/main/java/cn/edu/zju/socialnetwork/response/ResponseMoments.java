@@ -9,12 +9,12 @@ import java.util.List;
 @Setter
 public class ResponseMoments {
 
-    private List<MomentWithLike> moments;
+    private List<AdditionalMoment> moments;
     private boolean isLastPage;
 
     public ResponseMoments(){}
 
-    public ResponseMoments(List<MomentWithLike> moments, boolean isLastPage) {
+    public ResponseMoments(List<AdditionalMoment> moments, boolean isLastPage) {
         this.moments = moments;
         this.isLastPage = isLastPage;
     }

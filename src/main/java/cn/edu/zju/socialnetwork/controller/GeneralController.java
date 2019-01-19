@@ -28,11 +28,12 @@ public class GeneralController {
 
     @RequestMapping(value = "/homepage")
     public HomePageInfo homePage(@RequestBody HashMap<String,String> data, HttpServletRequest request){
+        System.out.println(data);
         String owner = data.get("owner");
         System.out.println("收到homepage请求：");
         System.out.println("主页的主人是："+owner);
         String visitor = GeneralUtil.getCurrentUserFromCookie(request);
-        System.out.println(visitor);
+        System.out.println("主页访问者："+visitor);
         /*if (visitor.equals("please login first")){
             return null;
         } else {

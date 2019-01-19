@@ -19,7 +19,7 @@ public class HomePageInfo {
     // 统计信息
     private StaticInfo statics;
     // 动态列表
-    private List<MomentWithLike> dongtailist;
+    private List<AdditionalMoment> dongtailist;
     // 是否最后一页，默认为false
     private boolean isLastPageOfMoment;
 
@@ -28,7 +28,7 @@ public class HomePageInfo {
     }
 
     // 传入当前用户、好友用户列表、动态数、留言数、动态列表
-    public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<MomentWithLike> moments) {
+    public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<AdditionalMoment> moments) {
         personal = new Person(user.getName(), user.getHeadpic(), user.getMotto(), user.getSex(), user.getAge(), user.getXinzuo(), user.getEmail());
         friends = new ArrayList<>();
         if (friendList != null) {
@@ -42,7 +42,7 @@ public class HomePageInfo {
         isLastPageOfMoment = false;
     }
 
-    public HomePageInfo(Person personal, List<Friend> friends, StaticInfo statics, List<MomentWithLike> dongtailist, boolean isLastPageOfMoment) {
+    public HomePageInfo(Person personal, List<Friend> friends, StaticInfo statics, List<AdditionalMoment> dongtailist, boolean isLastPageOfMoment) {
         this.personal = personal;
         this.friends = friends;
         this.statics = statics;

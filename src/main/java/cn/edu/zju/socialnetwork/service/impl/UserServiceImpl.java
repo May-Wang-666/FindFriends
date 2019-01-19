@@ -1,19 +1,14 @@
 package cn.edu.zju.socialnetwork.service.impl;
 
-import cn.edu.zju.socialnetwork.entity.Message;
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
-import cn.edu.zju.socialnetwork.response.MessageWithLike;
-import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.UserService;
-import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
