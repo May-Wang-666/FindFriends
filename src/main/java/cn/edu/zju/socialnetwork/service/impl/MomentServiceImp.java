@@ -56,6 +56,7 @@ public class MomentServiceImp implements MomentService {
     @Override
     public List<Moment> findMyMoments(String account, int pageNumber) {
         int from = StaticStrings.numInOnePage * (pageNumber - 1);
+        System.out.println(from);
         int to = StaticStrings.numInOnePage * pageNumber;
         return momentRepository.findMyMoments(account,from,to);
     }
