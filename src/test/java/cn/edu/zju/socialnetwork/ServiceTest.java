@@ -55,12 +55,6 @@ public class ServiceTest extends BaseTest {
         }
     }
 
-    @Test public void testMessage(){
-
-        List<Message> messages = messageRepository.findAllByOwnerEmailOrderByTimeDesc("sl@wlws.com");
-        System.out.println(messages.size());
-
-    }
 
     @Test
     public void test(){

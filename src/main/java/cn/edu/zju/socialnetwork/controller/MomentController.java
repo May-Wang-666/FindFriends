@@ -8,6 +8,7 @@ import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.ImageUtil;
+import cn.edu.zju.socialnetwork.util.StaticStrings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class MomentController {
             publishMoment(account,content,pic);
             List<Moment> newMoments = momentService.findMomentsOfMineAndFriends(account,1);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,currentUser);
-            if (newMoments.size() > 10){
+            if (newMoments.size() < StaticStrings.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);
@@ -60,10 +61,30 @@ public class MomentController {
             String pageNumber = data.get("pageNumber");
             String ownerAccount = data.get("ownerAccount");
             String visitorAccount = GeneralUtil.getCurrentUserFromCookie(request);
+            List<Moment> newMoments;
+            if(ownerAccount.equals(visitorAccount)){
+                newMoments = momentService.findMomentsOfMineAndFriends(ownerAccount,Integer.valueOf(pageNumber));
+            } else {
+                newMoments = momentService.findMyMoments(ownerAccount,Integer.valueOf(pageNumber));
+            }
+            User visitor = userService.findByAccount(visitorAccount);
+            List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,visitor);
+            if (newMoments.size() < StaticStrings.numInOnePage){
+                return new ResponseMoments(res,false);
+            } else {
+                return new ResponseMoments(res,true);
+            }
         }
         return null;
     }
 
+
+    // 删除动态
+    @RequestMapping(value = "/delete")
+    public String delete(@RequestBody HashMap<String,String> data){
+        String id = data.get("id");
+        return momentService.deleteMoment(Long.parseLong(id));
+    }
 
 
     // 发表动态
@@ -76,10 +97,5 @@ public class MomentController {
         return momentService.publishMoment(account, content, picurl, time);
     }
 
-    // 删除动态
-    @RequestMapping(value = "/delete")
-    public String delete(@RequestBody HashMap<String,String> data){
-        String id = data.get("id");
-        return momentService.deleteMoment(Long.parseLong(id));
-    }
+
 }

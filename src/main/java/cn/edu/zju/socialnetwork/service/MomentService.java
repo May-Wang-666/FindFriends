@@ -12,9 +12,10 @@ public interface MomentService {
     // 删除动态
     String deleteMoment(Long id);
 
-    // 获取某人及其好友的所有动态
+    // 获取某人及其好友的当前页动态
     List<Moment> findMomentsOfMineAndFriends(String account,int pageNumber);
 
-    // 获取某人的所有动态
+    // 获取某人的当前页动态
     List<Moment> findMyMoments(String account,int pageNumber);
+
 }

@@ -44,6 +44,7 @@ public class MomentServiceImp implements MomentService {
         }
     }
 
+    // 获取某个人及其好友的某一页动态
     @Override
     public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
         int from = StaticStrings.numInOnePage * (pageNumber - 1);
@@ -51,8 +52,11 @@ public class MomentServiceImp implements MomentService {
         return momentRepository.findFriendsMoments(account,from,to);
     }
 
+    // 获取一个人的某一页动态
     @Override
     public List<Moment> findMyMoments(String account, int pageNumber) {
-        return momentRepository.findMyMoments(account,pageNumber);
+        int from = StaticStrings.numInOnePage * (pageNumber - 1);
+        int to = StaticStrings.numInOnePage * pageNumber;
+        return momentRepository.findMyMoments(account,from,to);
     }
 }

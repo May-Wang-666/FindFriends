@@ -11,6 +11,7 @@ import cn.edu.zju.socialnetwork.response.HomePageInfo;
 import cn.edu.zju.socialnetwork.response.AdditionalMoment;
 import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.GeneralService;
+import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,10 @@ public class GeneralServiceImp implements GeneralService {
     UserRepository userRepository;
 
     @Autowired
-    MomentRepository momentRepository;
+    MessageRepository messageRepository;
 
     @Autowired
-    MessageRepository messageRepository;
+    MomentService momentService;
 
     @Override
     public Boolean like(String userAccount, Long itemId, String type) {
@@ -67,11 +68,9 @@ public class GeneralServiceImp implements GeneralService {
         List<Moment> moments;
         // 如果是用户本人访问本人的主页，可以看到所有好友动态
         if (ownerAccount.equals(visitorAccount)) {
-            moments = momentRepository.findFriendsMoments(ownerAccount,1);
+            moments = momentService.findMomentsOfMineAndFriends(ownerAccount,1);
         } else {
-            moments = userRepository.findMyMoments(ownerAccount,1);
-            // 另一种方案
-           // moments = momentRepository.findAllByOwnerEmail(ownerAccount);
+            moments = momentService.findMyMoments(ownerAccount,1);
         }
         // 判断访问者是否对显示的每条动态点赞，访问者可以是owner本身
         List<AdditionalMoment> additionalMoments = GeneralUtil.addInfoIntoMoments(moments,visitor);
