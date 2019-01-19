@@ -38,9 +38,10 @@ public class RepositoriesTest extends BaseTest {
     public void init() {
 
         try {
-            localAddress = InetAddress.getLocalHost().getHostAddress();
-            defaultPic = "http://" + localAddress + ":8080/headpics/default_headpic.png";
-        } catch (UnknownHostException e) {
+            //localAddress = InetAddress.getLocalHost().getHostAddress();
+            localAddress = "47.100.226.85";
+            defaultPic = "http://" + localAddress + ":8080/find-friends/headpics/default_headpic.png";
+        } catch (Exception e) {
             e.printStackTrace();
         }
         super.init();
@@ -49,7 +50,7 @@ public class RepositoriesTest extends BaseTest {
     private String getRandomHeadPic(){
         Random random = new Random();
         int index = random.nextInt(4);
-        return "http://"+localAddress+":8080/headpics/"+randomPics[index];
+        return "http://"+localAddress+":8080/find-friends/headpics/"+randomPics[index];
     }
 
 
@@ -69,8 +70,6 @@ public class RepositoriesTest extends BaseTest {
         for (int i = 0; i < 3; i++) {
             Moment moment = new Moment("大家好，我是朱七七", String.valueOf(System.currentTimeMillis()), defaultPic);
             moment.setOwner(zqq);
-            moment.likedByUser(zqq);
-            moment.likedByUser(wlh);
             momentRepository.save(moment);
             System.out.println("存入第" + i + "条动态成功");
         }
