@@ -37,4 +37,10 @@ public interface MomentRepository extends Neo4jRepository<Moment,Long> {
             "match (m:Moment)-[r:belongs_to]->(u:User) where u.email={email} return m,u,null as p,r,null as l order by m.time desc")
     List<Moment> findMyMoments(@Param("ownerEmial") String email, @Param("page") int page);
 
+
+    // Yukino
+
+
+
+
 }

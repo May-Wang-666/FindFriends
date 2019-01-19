@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -130,6 +131,24 @@ public class RepositoriesTest extends BaseTest {
             momentRepository.save(moment);
             System.out.println("存入第" + i + "条动态成功");
         }
+    }
+
+    @Test
+    public void yukinoTest(){
+
+//        List<Moment> res= momentRepository.findAllByOwner_Email("zqq@wlws.com");
+//        for (Moment m:res){
+//            System.out.println(m);
+//        }
+
+//        List<Long> ids=new ArrayList<>();
+//        ids.add(Long.valueOf(264));
+//        ids.add(Long.valueOf(265));
+//        List<Moment> res= momentRepository.findAllByOwner_Id("264");
+//
+//        for (Moment m:res){
+//            System.out.println(m);
+//        }
     }
 
 
