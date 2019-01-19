@@ -8,6 +8,8 @@ import cn.edu.zju.socialnetwork.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MomentServiceImp implements MomentService {
 
@@ -39,5 +41,15 @@ public class MomentServiceImp implements MomentService {
             momentRepository.deleteById(id);
             return "success";
         }
+    }
+
+    @Override
+    public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
+        return momentRepository.findFriendsMoments(account,pageNumber);
+    }
+
+    @Override
+    public List<Moment> findMyMoments(String account, int pageNumber) {
+        return momentRepository.findMyMoments(account,pageNumber);
     }
 }

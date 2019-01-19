@@ -25,12 +25,6 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
             "match (m:Moment)-[r:belongs_to]->(u:User) where u.email={email} return m,u,null as p,r,null as l order by m.time desc")
     List<Moment> findMyMoments(@Param("email") String email, @Param("page")int page);
 
-    // 返回当前用户及其好友的所有动态
-    @Query("match (m:Moment)-[r:belongs_to]->(u:User),(p:User)-[l:liked]->(m) where u.email={email} return m,u,p,r,l order by m.time desc " +
-            "union " +
-            "match (m:Moment)-[r:belongs_to]->(u:User) where u.email={email} return m,u,null as p,r,null as l order by m.time desc")
-    List<Moment> findFriendsMoments(@Param("email") String email, @Param("page") int page);
-
     // 返回用户留言数量
     @Query("match (u:User)-[:have]->(m:Message) where u.email={email} return count(m)")
     int findNumOfMessages(@Param("email") String email);
@@ -38,12 +32,6 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     // 返回用户动态数量
     @Query("match (m:Moment)-[:belongs_to]->(u:User) where u.email={email} return count(m)")
     int findNumOfMoments(@Param("email") String email);
-
-    // 返回当前用户的所有留言
-    @Query("match a=(u:User)-[r:have]->(m:Message),b=(:User)-[l:liked]->(m),c=(:User)-[:leaves]->(m) where u.email={email} return a,b,c,m order by m.time desc " +
-            "union " +
-            "match a=(u:User)-[r:have]->(m:Message),c=(:User)-[:leaves]->(m) where u.email={email}  return a,null as b,c,m order by m.time desc")
-    List<Message> findMessages(@Param("email") String email,@Param("page") int page);
 
 
     /* 以下为暂时没有用到的函数 */
@@ -60,9 +48,6 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     @Query("match (u:User) where u.email={email} set u.headpic={headpic} return u")
     User modifyHeadpic(@Param("email") String email, @Param("headpic")String headpic);
 
-    // 返回该用户点赞的所有动态
-    @Query("match (m:Moment)<-[:liked]-(u:User) where u.email={email} return m;")
-    List<Moment> findAllLikedMoments(@Param("email") String email);
 
     // 根据节点id获取用户
     @Query("match (n:User) where ID(n) = {id}")
