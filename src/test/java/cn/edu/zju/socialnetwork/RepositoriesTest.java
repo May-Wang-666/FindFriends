@@ -131,5 +131,10 @@ public class RepositoriesTest extends BaseTest {
         }
     }
 
+    @Test
+    public void findMoments(){
+        List<Moment> moments = momentRepository.findFriendsMoments("sl@wlws.com",0,100);
+        System.out.println(moments.size());
+    }
 
 }
