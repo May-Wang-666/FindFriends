@@ -155,32 +155,11 @@ public class RepositoriesTest extends BaseTest {
     }
 
     @Test
-    public void yukinoTest(){
-
-//        List<Moment> res= momentRepository.findAllByOwner_Email("zqq@wlws.com");
-//        for (Moment m:res){
-//            System.out.println(m);
-//        }
-
-//        List<String> emls=new ArrayList<>();
-//        emls.add("zqq@wlws.com");
-//        emls.add("sl@wlws.com");
-//        Pageable pageable=new PageRequest(1,2);
-//        List<Moment> res= momentRepository.findAllByOwner_EmailInOrderByTimeDesc(emls,pageable);
-
-//        String[] array={"zqq@wlws.com","sl@wlws.com"};
-//        List<String> array=new ArrayList<>();
-//        array.add("zqq@wlws.com");
-//        array.add("sl@wlws.com");
-//        List<Moment> res=momentRepository.zzz(array);
-//
-//        for (Moment m:res){
-//            System.out.println(m);
-//        }
-
-
-
-
+    public void testMessage(){
+        List<Message> res= messageRepository.findMessageByUser("sl@wlws.com",0,100);
+        for (Message msg:res){
+            System.out.println(msg);
+        }
     }
 
 
