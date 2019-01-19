@@ -5,6 +5,7 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.MomentService;
+import cn.edu.zju.socialnetwork.util.StaticStrings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,9 @@ public class MomentServiceImp implements MomentService {
 
     @Override
     public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
-        return momentRepository.findFriendsMoments(account,pageNumber);
+        int from = StaticStrings.numInOnePage * (pageNumber - 1);
+        int to = StaticStrings.numInOnePage * pageNumber;
+        return momentRepository.findFriendsMoments(account,from,to);
     }
 
     @Override

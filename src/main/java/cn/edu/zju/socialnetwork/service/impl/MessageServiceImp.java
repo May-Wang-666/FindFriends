@@ -8,6 +8,8 @@ import cn.edu.zju.socialnetwork.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class MessageServiceImp implements MessageService {
@@ -54,5 +56,10 @@ public class MessageServiceImp implements MessageService {
             messageRepository.deleteById(id);
             return "success";
         }
+    }
+
+    @Override
+    public List<Message> findMessagesByAccount(String account, int pageNumber) {
+        return messageRepository.findMessagesByAccount(account,pageNumber);
     }
 }

@@ -2,10 +2,6 @@ package cn.edu.zju.socialnetwork.service;
 
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
-import cn.edu.zju.socialnetwork.response.MessageWithLike;
-import cn.edu.zju.socialnetwork.response.ResponseMessages;
-
-import java.util.List;
 
 public interface UserService {
 

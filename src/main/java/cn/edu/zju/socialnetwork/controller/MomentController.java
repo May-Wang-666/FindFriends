@@ -2,8 +2,7 @@ package cn.edu.zju.socialnetwork.controller;
 
 import cn.edu.zju.socialnetwork.entity.Moment;
 import cn.edu.zju.socialnetwork.entity.User;
-import cn.edu.zju.socialnetwork.request.MomentInfo;
-import cn.edu.zju.socialnetwork.response.MomentWithLike;
+import cn.edu.zju.socialnetwork.response.AdditionalMoment;
 import cn.edu.zju.socialnetwork.response.ResponseMoments;
 import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.service.UserService;
@@ -48,7 +47,7 @@ public class MomentController {
             String pic = data.get("pic");
             publishMoment(account,content,pic);
             List<Moment> newMoments = momentService.findMomentsOfMineAndFriends(account,1);
-            List<MomentWithLike> res = GeneralUtil.addLikeInfoIntoMoments(newMoments,currentUser);
+            List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,currentUser);
             if (newMoments.size() > 10){
                 return new ResponseMoments(res,false);
             } else {
@@ -79,7 +78,8 @@ public class MomentController {
 
     // 删除动态
     @RequestMapping(value = "/delete")
-    public String delete(@RequestBody String id){
+    public String delete(@RequestBody HashMap<String,String> data){
+        String id = data.get("id");
         return momentService.deleteMoment(Long.parseLong(id));
     }
 }

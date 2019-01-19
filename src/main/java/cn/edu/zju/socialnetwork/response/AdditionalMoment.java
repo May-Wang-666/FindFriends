@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 // 包含了当前用户是否点赞的动态信息
-public class MomentWithLike {
+public class AdditionalMoment {
 
     private Long id;
     // 用户昵称
@@ -22,11 +22,13 @@ public class MomentWithLike {
     private int like;
     // 当前访问用户是否点赞
     private boolean liked;
+    // 当前用户是否可以删除
+    private boolean isDeletable;
     // 动态图片
     private String pic;
 
-    public MomentWithLike(){}
-    public MomentWithLike(Long id, String nickname, String headpic, String text, String time, String pic) {
+    public AdditionalMoment(){}
+    public AdditionalMoment(Long id, String nickname, String headpic, String text, String time, String pic) {
         this.id = id;
         this.nickname = nickname;
         this.headpic = headpic;
@@ -34,6 +36,7 @@ public class MomentWithLike {
         this.time = time;
         this.pic = pic;
         this.liked = false;
+        this.isDeletable = false;
         this.like = 0;
     }
 
@@ -67,5 +70,9 @@ public class MomentWithLike {
 
     public void setLike(int like) {
         this.like = like;
+    }
+
+    public void setDeletable(boolean deletable) {
+        isDeletable = deletable;
     }
 }

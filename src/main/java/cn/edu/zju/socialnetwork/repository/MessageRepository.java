@@ -22,7 +22,7 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
             "union " +
             "match a=(u:User)-[r:have]->(m:Message),c=(:User)-[:leaves]->(m) where u.email={email} " +
             "return a,null as b,c,m order by m.time desc")
-    List<Message> findMessagesByAccount(@Param("email") String email);
+    List<Message> findMessagesByAccount(@Param("email") String email, int pageNumber);
 
 
 }
