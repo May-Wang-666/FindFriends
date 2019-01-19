@@ -1,5 +1,8 @@
 package cn.edu.zju.socialnetwork.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,6 +15,9 @@ import java.util.Date;
 import java.util.UUID;
 
 public class ImageUtil {
+
+    @Autowired
+    private static Environment env;
 
     /**
      * decode base64编码的图片文件并将其保存到指定目录
@@ -52,13 +58,15 @@ public class ImageUtil {
             e2.printStackTrace();
         }
         // 返回本地文件的访问路径
-        String localIP = null;
+        /*String localIP = null;
         try {
             localIP = InetAddress.getLocalHost().getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        }
-        return "http://"+ localIP +":8080/images/"+imgName;
+        }*/
+        //return "http://"+ localIP +":8080/images/"+imgName;
+        String visitorPath = env.getProperty("visit.path");
+        return visitorPath+imgName;
     }
 
 

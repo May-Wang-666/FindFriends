@@ -9,10 +9,12 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.edu.zju</groupId>
-    <artifactId>socialnetwork</artifactId>
+    <artifactId>find-friends</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>socialnetwork</name>
+    <name>find-friends</name>
     <description>homework of advanced database course</description>
+
+    <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -25,16 +27,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-neo4j</artifactId>
         </dependency>
-        <dependency>
+      <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
-            <version>5.1.3.RELEASE</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j-parent</artifactId>
             <version>5.1.3.RELEASE</version>
-        </dependency>
+        </dependency>-->
         <!-- 使用http协议进行连接 -->
         <dependency>
             <groupId>org.neo4j</groupId>
@@ -77,46 +78,61 @@
             <version>1.18.4</version>
         </dependency>
 
+        <!--&lt;!&ndash; JJWT &ndash;&gt;
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>-->
+
+        <!--添加servlet-api的依赖，使用war包部署这个必须要有-->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-servlet-api</artifactId>
+            <version>8.0.36</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- JJWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
+        <finalName>${artifactId}}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!--<plugin>-->
+                <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
+                <!--<version>2.2</version>-->
+                <!--<configuration>-->
+                    <!--<path>/find-friends</path>-->
+                    <!--<url>http://47.100.226.85:8080/manager/text</url>-->
+                    <!--<username>zqq</username>-->
+                    <!--<password>zqq</password>-->
+                    <!--<update>true</update>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+
+            <!--tomcat插件-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/find-friends</path>
+                    <!--SSH隧道本地端口转发-->
+                    <url>http://47.100.226.85:8080/manager/text</url>
+                    <username>zqq</username>
+                    <password>zqq</password>
+                    <update>true</update>
+                </configuration>
             </plugin>
         </plugins>
     </build>

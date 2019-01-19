@@ -20,4 +20,7 @@ spring:
 
 # 设置本地文件保存路径
 upload:
-  path: C:/Users/17469/Desktop/images/
+  path: /home/zqq/friends/
+
+visit:
+  path: http://47.100.226.85/friends/
