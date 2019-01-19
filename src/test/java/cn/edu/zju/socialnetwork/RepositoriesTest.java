@@ -9,6 +9,8 @@ import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -132,6 +134,26 @@ public class RepositoriesTest extends BaseTest {
         }
     }
 
+    // 根据用户Email列表查询这些用户所发的朋友圈，结果按时间排序，带有分页功能
+    @Test
+    public void testFindMomentsByUsers(){
+        List<String> emails=new ArrayList<>();
+        emails.add("zqq@wlws.com");
+        emails.add("sl@wlws.com");
+        List<Moment> res=momentRepository.findMomentsByUsers(emails,0,100);
+        for (Moment m:res){
+            System.out.println(m);
+        }
+    }
+
+    @Test
+    public void testFindFriendsMoments(){
+        List<Moment> res=momentRepository.findFriendsMoments("zqq@wlws.com",0,100);
+        for (Moment m:res){
+            System.out.println(m);
+        }
+    }
+
     @Test
     public void yukinoTest(){
 
@@ -140,14 +162,25 @@ public class RepositoriesTest extends BaseTest {
 //            System.out.println(m);
 //        }
 
-//        List<Long> ids=new ArrayList<>();
-//        ids.add(Long.valueOf(264));
-//        ids.add(Long.valueOf(265));
-//        List<Moment> res= momentRepository.findAllByOwner_Id("264");
+//        List<String> emls=new ArrayList<>();
+//        emls.add("zqq@wlws.com");
+//        emls.add("sl@wlws.com");
+//        Pageable pageable=new PageRequest(1,2);
+//        List<Moment> res= momentRepository.findAllByOwner_EmailInOrderByTimeDesc(emls,pageable);
+
+//        String[] array={"zqq@wlws.com","sl@wlws.com"};
+//        List<String> array=new ArrayList<>();
+//        array.add("zqq@wlws.com");
+//        array.add("sl@wlws.com");
+//        List<Moment> res=momentRepository.zzz(array);
 //
 //        for (Moment m:res){
 //            System.out.println(m);
 //        }
+
+
+
+
     }
 
 

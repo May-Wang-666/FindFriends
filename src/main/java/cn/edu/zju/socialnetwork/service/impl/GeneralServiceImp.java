@@ -67,7 +67,7 @@ public class GeneralServiceImp implements GeneralService {
         List<Moment> moments;
         // 如果是用户本人访问本人的主页，可以看到所有好友动态
         if (ownerAccount.equals(visitorAccount)) {
-            moments = momentRepository.findFriendsMoments(ownerAccount,1);
+            moments = momentRepository.findFriendsMoments(ownerAccount,0,1);
         } else {
             moments = userRepository.findMyMoments(ownerAccount,1);
             // 另一种方案

@@ -14,6 +14,7 @@ public class MyPathConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
         registry.addResourceHandler("/uploaded/**").addResourceLocations("file:" + env.getProperty("upload.path"));
         registry.addResourceHandler("/headpics/**").addResourceLocations("classpath:/static/headpics/");
         registry.addResourceHandler("/momentpics/**").addResourceLocations("classpath:/momentpics/");

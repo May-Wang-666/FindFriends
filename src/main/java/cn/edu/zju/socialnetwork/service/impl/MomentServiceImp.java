@@ -45,11 +45,13 @@ public class MomentServiceImp implements MomentService {
 
     @Override
     public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
-        return momentRepository.findFriendsMoments(account,pageNumber);
+//        return momentRepository.findFriendsMoments(account,pageNumber);
+        return null;
     }
 
     @Override
     public List<Moment> findMyMoments(String account, int pageNumber) {
-        return momentRepository.findMyMoments(account,pageNumber);
+//        return momentRepository.findMyMoments(account,pageNumber);
+        return null;
     }
 }
