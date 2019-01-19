@@ -33,11 +33,6 @@ public class Message {
     public Message() {
     }
 
-    public Message(String text, String time) {
-        this.text = text;
-        this.time = time;
-    }
-
     public Message(String text, String time, User owner) {
         this.text = text;
         this.time = time;
@@ -105,10 +100,6 @@ public class Message {
 
     public Set<User> getLikedBy() {
         return likedBy;
-    }
-
-    public void setLikedBy(Set<User> likedBy) {
-        this.likedBy = likedBy;
     }
 
     @Override

@@ -24,15 +24,16 @@ public class HomePageInfo {
     private boolean isLastPageOfMoment;
 
 
-    public HomePageInfo(){}
+    public HomePageInfo() {
+    }
 
     // 传入当前用户、好友用户列表、动态数、留言数、动态列表
     public HomePageInfo(User user, List<User> friendList, int numOfMoments, int numOfMessages, List<MomentWithLike> moments) {
         personal = new Person(user.getName(), user.getHeadpic(), user.getMotto(), user.getSex(), user.getAge(), user.getXinzuo(), user.getEmail());
         friends = new ArrayList<>();
-        if (friendList != null){
-            for(User friend:friendList){
-                Friend tmp = new Friend(friend.getName(),friend.getEmail(),friend.getHeadpic());
+        if (friendList != null) {
+            for (User friend : friendList) {
+                Friend tmp = new Friend(friend.getName(), friend.getEmail(), friend.getHeadpic());
                 friends.add(tmp);
             }
         }
@@ -54,6 +55,7 @@ public class HomePageInfo {
     }
 
     @Getter
+    @Setter
     private static class Person {
         private String nickname;
         private String headpic;
@@ -78,12 +80,14 @@ public class HomePageInfo {
     }
 
     @Getter
-    private static class Friend{
+    @Setter
+    private static class Friend {
         private String nickname;
         private String email;
         private String headpic;
 
-        public Friend(){}
+        public Friend() {
+        }
 
         public Friend(String nickname, String email, String headpic) {
             this.nickname = nickname;
@@ -93,11 +97,13 @@ public class HomePageInfo {
     }
 
     @Getter
+    @Setter
     private static class StaticInfo {
         private int dongtai;
         private int liuyan;
 
-        public StaticInfo(){}
+        public StaticInfo() {
+        }
 
         public StaticInfo(int dongtai, int liuyan) {
             this.dongtai = dongtai;

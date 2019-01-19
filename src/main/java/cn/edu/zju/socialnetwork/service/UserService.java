@@ -1,5 +1,6 @@
 package cn.edu.zju.socialnetwork.service;
 
+import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
 import cn.edu.zju.socialnetwork.response.MessageWithLike;
 import cn.edu.zju.socialnetwork.response.ResponseMessages;
@@ -17,7 +18,7 @@ public interface UserService {
     // 用户登录
     String login(String account, String password);
 
-    // 获取用户所有留言
-    ResponseMessages getMessages(String ownerAccount, String visitorAccount);
+    // 寻找用户
+    User findByAccount(String account);
 
 }

@@ -1,16 +1,21 @@
 package cn.edu.zju.socialnetwork.controller;
 
-import cn.edu.zju.socialnetwork.request.LoginInfo;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -52,13 +57,13 @@ public class UserController {
 
     // 登录
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody LoginInfo loginInfo, HttpServletResponse response) {
+    public String login(@RequestBody HashMap<String,String> loginInfo, HttpServletResponse response) {
         System.out.println("收到登录请求");
-        String email = loginInfo.getEmail();
-        String password = loginInfo.getPassword();
+        String email = loginInfo.get("email");
+        String password = loginInfo.get("password");
         String res = userService.login(email, password);
         // 登录成功，生成cookie
-        if(!res.equals("user does not exist") && !res.equals("incorrect password")){
+        if (!res.equals("user does not exist") && !res.equals("incorrect password")) {
             Cookie cookie = new Cookie("loginAccount", email);
             cookie.setMaxAge(60 * 60 * 24); //有效期，一天
             cookie.setPath("/");
@@ -71,12 +76,15 @@ public class UserController {
 
     // 注销登录
     @RequestMapping(value = "/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response){
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length != 0){
+        if (cookies != null && cookies.length != 0) {
             cookies[0].setMaxAge(0); // 使cookie失效
         }
         return;
     }
+
+    // 查找好友
+
 
 }

@@ -10,13 +10,12 @@ spring:
       uri: http://47.100.226.85:7474
       username: neo4j
       password: neo4j123
-
+  mvc:
+    static-path-pattern: /**
   # 设置静态资源访问路径
   resources:
     static-locations: classpath:/static/,/images/,file:${upload.path}}
 
-  mvc:
-    static-path-pattern: /**
 
 
 # 设置本地文件保存路径

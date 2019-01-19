@@ -77,33 +77,9 @@ public class UserServiceImpl implements UserService {
         return user.getEmail();
     }
 
-
-    /**
-     * 获取用户留言板信息
-     *
-     * @param ownerAccount   留言板主人账号
-     * @param visitorAccount 留言板访问者账号
-     * @return 有留言，List<MessageWithLike> 没有留言，size为0的list
-     */
     @Override
-    public ResponseMessages getMessages(String ownerAccount, String visitorAccount) {
-        User visitor = userRepository.findByEmail(visitorAccount);
-        List<Message> messages = userRepository.findMessages(ownerAccount,1);
-        int totalMessage = userRepository.findNumOfMessages(ownerAccount);
-        System.out.println("留言数：" + totalMessage);
-        List<MessageWithLike> messageWithLikes = new ArrayList<>();
-        if (messages.size() != 0) {
-            for (Message m : messages) {
-                User messageOwner = m.getOwner();
-                MessageWithLike rm = new MessageWithLike(m.getId(), messageOwner.getName(), messageOwner.getHeadpic(), m.getText(), m.getTime());
-                Set<User> likedUsers = m.getLikedBy();
-                if (likedUsers != null && likedUsers.size() != 0) {
-                    rm.setLike(likedUsers.size());
-                    rm.setLiked(GeneralUtil.isIn(likedUsers, visitor));
-                }
-                messageWithLikes.add(rm);
-            }
-        }
-        return new ResponseMessages(messageWithLikes,totalMessage);
+    public User findByAccount(String account) {
+        return userRepository.findByEmail(account);
     }
+
 }
