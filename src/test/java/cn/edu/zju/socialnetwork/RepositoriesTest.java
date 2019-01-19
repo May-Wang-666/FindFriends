@@ -9,12 +9,9 @@ import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -134,33 +131,10 @@ public class RepositoriesTest extends BaseTest {
         }
     }
 
-    // 根据用户Email列表查询这些用户所发的朋友圈，结果按时间排序，带有分页功能
     @Test
-    public void testFindMomentsByUsers(){
-        List<String> emails=new ArrayList<>();
-        emails.add("zqq@wlws.com");
-        emails.add("sl@wlws.com");
-        List<Moment> res=momentRepository.findMomentsByUsers(emails,0,100);
-        for (Moment m:res){
-            System.out.println(m);
-        }
+    public void findMoments(){
+        List<Moment> moments = momentRepository.findFriendsMoments("sl@wlws.com",0,100);
+        System.out.println(moments.size());
     }
-
-    @Test
-    public void testFindFriendsMoments(){
-        List<Moment> res=momentRepository.findFriendsMoments("zqq@wlws.com",0,100);
-        for (Moment m:res){
-            System.out.println(m);
-        }
-    }
-
-    @Test
-    public void testMessage(){
-        List<Message> res= messageRepository.findMessageByUser("sl@wlws.com",0,100);
-        for (Message msg:res){
-            System.out.println(msg);
-        }
-    }
-
 
 }
