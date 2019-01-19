@@ -12,6 +12,7 @@ import cn.edu.zju.socialnetwork.service.GeneralService;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,9 @@ public class ServiceTest extends BaseTest {
 
     @Autowired
     MessageRepository messageRepository;
+
+    @Autowired
+    Environment env;
 
     @Test
     public void testHomePage(){
@@ -60,10 +64,7 @@ public class ServiceTest extends BaseTest {
 
     @Test
     public void test(){
-        HashMap<String,String> map = new HashMap<>();
-        map.put("1","woshiyi");
-        map.put("2","woshier");
-        System.out.println(map);
+        System.out.println(env.getProperty("visit.path"));
     }
 
 
