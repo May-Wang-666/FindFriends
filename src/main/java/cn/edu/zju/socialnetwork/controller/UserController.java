@@ -129,6 +129,15 @@ public class UserController {
         return map;
     }
 
-
-
+    // 修改个人信息
+    @RequestMapping(value = "/personal", method = RequestMethod.POST)
+    public String updatePersonalInfo(@RequestBody HashMap<String, String> data, HttpServletRequest request){
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        String nickname = data.get("nickname");
+        String sex = data.get("sex");
+        String xinzuo = data.get("xinzuo");
+        String motto = data.get("motto");
+        int age = Integer.valueOf(data.get("age"));
+        return userService.updatePersonalInfo(currentAccount,nickname,sex,xinzuo,age,motto);
+    }
 }

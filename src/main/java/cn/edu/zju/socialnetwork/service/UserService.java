@@ -28,6 +28,9 @@ public interface UserService {
     // 修改用户头像
     String modifyHeadPic(String account, String dataURL);
 
+    // 修改用户个人信息
+    String updatePersonalInfo(String account,String nickname,String sex, String xinzuo, int age, String motto);
+
 
     // 根据Email查找用户
     User findByAccount(String account);

@@ -121,6 +121,13 @@ public class UserServiceImpl implements UserService {
         return newPicURL;
     }
 
+    // 修改个人信息
+    @Override
+    public String updatePersonalInfo(String account, String nickname, String sex, String xinzuo, int age, String motto) {
+        userRepository.modifyName(account,nickname,sex,xinzuo,age,motto);
+        return "success";
+    }
+
 
     // 根据邮箱查找用户/获取用户个人信息
     @Override
