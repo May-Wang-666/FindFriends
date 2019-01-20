@@ -8,7 +8,7 @@ import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.ImageUtil;
-import cn.edu.zju.socialnetwork.util.StaticStrings;
+import cn.edu.zju.socialnetwork.util.StaticValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +49,7 @@ public class MomentController {
             publishMoment(account,content,pic);
             List<Moment> newMoments = momentService.findMomentsOfMineAndFriends(account,1);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,currentUser);
-            if (newMoments.size() < StaticStrings.numInOnePage){
+            if (newMoments.size() < StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);
@@ -69,7 +69,7 @@ public class MomentController {
             }
             User visitor = userService.findByAccount(visitorAccount);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,visitor);
-            if (newMoments.size() < StaticStrings.numInOnePage){
+            if (newMoments.size() < StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);

@@ -6,7 +6,7 @@ import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
-import cn.edu.zju.socialnetwork.util.StaticStrings;
+import cn.edu.zju.socialnetwork.util.StaticValues;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +53,8 @@ public class MomentServiceImp implements MomentService {
     // 获取某个人及其好友的某一页动态
     @Override
     public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
-        int from = StaticStrings.numInOnePage * (pageNumber - 1);
-        int to = StaticStrings.numInOnePage * pageNumber;
+        int from = StaticValues.numInOnePage * (pageNumber - 1);
+        int to = StaticValues.numInOnePage * pageNumber;
 
         // 因findFriendsMoments接口问题，分两步获取
         List<User> users=userRepository.findFriends(account);
@@ -69,9 +69,9 @@ public class MomentServiceImp implements MomentService {
     // 获取一个人的某一页动态
     @Override
     public List<Moment> findMyMoments(String account, int pageNumber) {
-        int from = StaticStrings.numInOnePage * (pageNumber - 1);
+        int from = StaticValues.numInOnePage * (pageNumber - 1);
         System.out.println(from);
-        int to = StaticStrings.numInOnePage * pageNumber;
+        int to = StaticValues.numInOnePage * pageNumber;
         return momentRepository.findMyMoments(account,from,to);
     }
 

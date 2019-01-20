@@ -47,41 +47,41 @@ public class ServiceTest extends BaseTest {
     Environment env;
 
     @Test
-    public void testHomePage(){
-        HomePageInfo info = generalService.getHomePage("zqq@wlws.com","sl@wlws.com");
+    public void testHomePage() {
+        HomePageInfo info = generalService.getHomePage("zqq@wlws.com", "sl@wlws.com");
         System.out.println(info);
     }
 
     @Test
-    public void testMomentRepository(){
+    public void testMomentRepository() {
         User zqq = userRepository.findByEmail("sl@wlws.com");
         //List<Moment> moments = momentRepository.findAllByOwnerEmail(zqq.getEmail());
         //List<Moment> moments = momentRepository.findAllByOwner(zqq);
         List<Moment> moments = momentRepository.findAllByOwnerEmailOrderByTimeDesc(zqq.getEmail());
         System.out.println(moments.size());
-        for (Moment moment:moments){
+        for (Moment moment : moments) {
             System.out.println(moment);
         }
     }
 
     @Test
-    public void testMomentService(){
-        List<Moment> moments=momentService.findMomentsOfMineAndFriends("zqq@wlws.com",1);
+    public void testMomentService() {
+        List<Moment> moments = momentService.findMomentsOfMineAndFriends("zqq@wlws.com", 1);
         System.out.println(moments.size());
-        for (Moment moment:moments){
+        for (Moment moment : moments) {
             System.out.println(moment);
         }
     }
 
 
     @Test
-    public void test(){
+    public void test() {
         System.out.println(env.getProperty("visit.path"));
     }
 
     @Test
-    public void testCancelLike(){
-        Message message = messageService.findMessageById(Long.valueOf(623));
+    public void testCancelLike() {
+        Message message = messageService.findMessageById(Long.valueOf(557));
         System.out.println(message);
         Moment moment = momentService.findMomentById(Long.valueOf(467));
         System.out.println(moment);

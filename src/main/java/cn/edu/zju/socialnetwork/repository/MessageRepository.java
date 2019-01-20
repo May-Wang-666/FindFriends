@@ -10,7 +10,8 @@ import java.util.List;
 public interface MessageRepository extends Neo4jRepository<Message, Long> {
 
     //根据Id获取留言
-    @Query("match p=(:User)-[:have]->(m:Message)<-[:liked]-(:User) where ID(m)={id} return p")
+    @Query("match p=(:User)-[:have]->(m:Message)<-[:leaves]-(:User) where ID(m)={id} with p,m " +
+            "optional match l=(:User)-[:liked]->(m) return p,l")
     Message findMessageById(@Param("id") Long id);
 
 

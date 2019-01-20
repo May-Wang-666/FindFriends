@@ -28,7 +28,7 @@ public class Moment {
     private User owner;
 
     @Relationship(type = "liked", direction = Relationship.INCOMING)
-    private Set<User> likedBy;
+    private Set<User> likedBy = new HashSet<>();
 
     public Moment() {
     }
@@ -118,15 +118,6 @@ public class Moment {
     }
 
     public void setLikedBy(Set<User> likedBy) {
-        this.likedBy = likedBy;
-    }
-
-    public Moment(Long id, String content, String time, String pic, User owner, Set<User> likedBy) {
-        this.id = id;
-        this.content = content;
-        this.time = time;
-        this.pic = pic;
-        this.owner = owner;
         this.likedBy = likedBy;
     }
 

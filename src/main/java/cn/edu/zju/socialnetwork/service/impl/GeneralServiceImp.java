@@ -38,16 +38,30 @@ public class GeneralServiceImp implements GeneralService {
     @Autowired
     MessageService messageService;
 
-    // 为动态/留言点赞
+    /**
+     * 给动态/留言点赞
+     * @param userAccount 点赞用户
+     * @param itemId      点赞对象的id
+     * @param type        moment / message
+     * @return id不存在，false，否则，true
+     */
     @Override
     public Boolean like(String userAccount, Long itemId, String type) {
         User currentUser = userService.findByAccount(userAccount);
         if (type.equals("moment")){
             Moment moment = momentService.findMomentById(itemId);
+            if (moment == null){
+                System.out.println("id 为 " + itemId+"的 "+type+" 不存在");
+                return false;
+            }
             moment.likedByUser(currentUser);
             momentService.saveMoment(moment);
         } else if (type.equals("message")){
             Message message = messageService.findMessageById(itemId);
+            if (message == null){
+                System.out.println("id 为 " + itemId+"的 "+type+" 不存在");
+                return false;
+            }
             message.likedByUser(currentUser);
             messageService.saveMessage(message);
         }
@@ -59,11 +73,18 @@ public class GeneralServiceImp implements GeneralService {
     public Boolean cancelLike(String userAccount, Long itemId, String type) {
         if (type.equals("moment")){
             Moment moment = momentService.findMomentById(itemId);
+            if (moment == null){
+                System.out.println("id 为 " + itemId+"的 "+type+" 不存在");
+                return false;
+            }
             moment.cancledLikeBy(userAccount);
             momentService.saveMoment(moment);
         } else if (type.equals("message")){
             Message message = messageService.findMessageById(itemId);
-            System.out.println(message);
+            if (message == null){
+                System.out.println("id 为 " + itemId+"的 "+type+" 不存在");
+                return false;
+            }
             message.cancledLikeBy(userAccount);
             messageService.saveMessage(message);
         }

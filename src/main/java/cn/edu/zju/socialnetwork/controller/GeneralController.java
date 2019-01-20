@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 
 @RestController
@@ -50,7 +51,7 @@ public class GeneralController {
 
     // 为留言/动态 点赞/取消赞
     @RequestMapping(value = "like", method = RequestMethod.POST)
-    public void like(@RequestBody HashMap<String,String> data,HttpServletRequest request){
+    public void like(@RequestBody HashMap<String,String> data,HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println(data);
         String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
         Long itemId = Long.valueOf(data.get("id").trim());
@@ -61,11 +62,14 @@ public class GeneralController {
             isCancelb = true;
         }
         System.out.println("收到 "+type+" 点赞请求，isCancel: "+isCancelb);
+        boolean res;
         if (isCancelb){
-            generalService.cancelLike(currentAccount,itemId,type);
+            res = generalService.cancelLike(currentAccount,itemId,type);
         } else {
-            generalService.like(currentAccount,itemId,type);
+            res = generalService.like(currentAccount,itemId,type);
         }
-
+        if (res == false){
+            response.sendError(499,"no "+type + "has id "+itemId);
+        }
     }
 }
