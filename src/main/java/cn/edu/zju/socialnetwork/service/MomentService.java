@@ -2,6 +2,7 @@ package cn.edu.zju.socialnetwork.service;
 
 import cn.edu.zju.socialnetwork.entity.Moment;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface MomentService {
@@ -10,7 +11,7 @@ public interface MomentService {
     String publishMoment(String account,String content,String pic,String time);
 
     // 删除动态
-    String deleteMoment(Long id);
+    String deleteMoment(Long id,HttpServletRequest request);
 
     // 获取某人及其好友的当前页动态
     List<Moment> findMomentsOfMineAndFriends(String account,int pageNumber);

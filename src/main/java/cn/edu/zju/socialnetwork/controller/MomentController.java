@@ -80,10 +80,12 @@ public class MomentController {
 
 
     // 删除动态
-    @RequestMapping(value = "/delete")
-    public String delete(@RequestBody HashMap<String,String> data){
+    // 返回留言时已经给出是否可以删除字段
+    // 删除权限由前端控制
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public String delete(@RequestBody HashMap<String,String> data, HttpServletRequest request){
         String id = data.get("id");
-        return momentService.deleteMoment(Long.parseLong(id));
+        return momentService.deleteMoment(Long.parseLong(id.trim()),request);
     }
 
 
@@ -96,6 +98,5 @@ public class MomentController {
         }
         return momentService.publishMoment(account, content, picurl, time);
     }
-
 
 }

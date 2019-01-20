@@ -5,10 +5,12 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.MomentService;
+import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.StaticStrings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -34,13 +36,16 @@ public class MomentServiceImp implements MomentService {
 
     // 删除动态
     @Override
-    public String deleteMoment(Long id) {
+    public String deleteMoment(Long id, HttpServletRequest request) {
         Moment moment = momentRepository.findMomentById(id);
         if (moment == null){
             return "no moment has id "+id;
-        } else {
+        }  else {
             momentRepository.deleteById(id);
-            return "success";
+            String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+            // 返回用户动态数量
+            int numOfMoments = momentRepository.findNumOfMoments(currentAccount);
+            return String.valueOf(numOfMoments);
         }
     }
 
@@ -56,6 +61,7 @@ public class MomentServiceImp implements MomentService {
     @Override
     public List<Moment> findMyMoments(String account, int pageNumber) {
         int from = StaticStrings.numInOnePage * (pageNumber - 1);
+        System.out.println(from);
         int to = StaticStrings.numInOnePage * pageNumber;
         return momentRepository.findMyMoments(account,from,to);
     }

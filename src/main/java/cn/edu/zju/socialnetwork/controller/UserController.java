@@ -1,7 +1,10 @@
 package cn.edu.zju.socialnetwork.controller;
 
+import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
+import cn.edu.zju.socialnetwork.response.FriendInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
+import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @RestController
@@ -25,16 +30,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    // 测试上传文件接口
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public String testUploadingImg(@RequestBody String dataURL) {
-        System.out.println("传入数据：");
-        System.out.println(dataURL);
-        String localURL = ImageUtil.saveBase64Image(dataURL, env.getProperty("upload.path"));
-        System.out.println("成功保存图片：" + localURL);
-        return localURL;
-    }
 
     // 判断邮箱地址是否已被使用
     // 已使用返回false，未使用返回true
@@ -85,6 +80,37 @@ public class UserController {
     }
 
     // 查找好友
+    @RequestMapping(value = "/findfriends",method = RequestMethod.GET)
+    public List<FriendInfo> findFriends(@RequestBody  HashMap<String, String> data){
+        String keyWord = data.get("keyWord");
+        String isEmail = data.get("isEmail");
+        System.out.println("查找好友："+keyWord);
+        List<User> users = userService.findFriends(keyWord,Boolean.valueOf(isEmail));
+        if (users == null || users.size() == 0){
+            return null;
+        } else {
+            List<FriendInfo> friendInfos = new ArrayList<>();
+            for (User user:users){
+                friendInfos.add(new FriendInfo(user.getEmail(),user.getName(),user.getHeadpic()));
+            }
+            return friendInfos;
+        }
+    }
+
+    // 关注/取消关注好友
+    @RequestMapping(value = "/makeFriends", method = RequestMethod.POST)
+    public String follow(@RequestBody HashMap<String,String> data, HttpServletRequest request){
+        String followedAccount = data.get("email");
+        String followerAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        boolean isUnfollow = Boolean.valueOf(data.get("isDelete"));
+        if (isUnfollow){
+            userService.unFollow(followedAccount,followerAccount);
+        } else {
+            userService.follow(followedAccount,followerAccount);
+        }
+        return "success";
+    }
+
 
 
 }

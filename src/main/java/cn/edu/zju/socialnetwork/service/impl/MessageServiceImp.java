@@ -5,10 +5,12 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MessageRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.MessageService;
+import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import cn.edu.zju.socialnetwork.util.StaticStrings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -49,13 +51,15 @@ public class MessageServiceImp implements MessageService {
 
     // 根据留言id删除留言
     @Override
-    public String deleteMessage(Long id) {
+    public String deleteMessage(Long id, HttpServletRequest request) {
         Message message = messageRepository.findMessageById(id);
         if (message == null) {
             return "no message has id " + id;
         } else {
             messageRepository.deleteById(id);
-            return "success";
+            String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+            int numOfMessages = messageRepository.findTotalMessageByEmail(currentAccount);
+            return String.valueOf(numOfMessages);
         }
     }
 
@@ -64,5 +68,10 @@ public class MessageServiceImp implements MessageService {
         int form = StaticStrings.numInOnePage * (pageNumber-1);
         int to = StaticStrings.numInOnePage * pageNumber;
         return messageRepository.findMessagesByAccount(account,form,to);
+    }
+
+    @Override
+    public int findTotalMessageByAccount(String account) {
+        return messageRepository.findTotalMessageByEmail(account);
     }
 }

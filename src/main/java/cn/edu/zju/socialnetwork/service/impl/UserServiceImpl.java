@@ -4,17 +4,24 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
+import cn.edu.zju.socialnetwork.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private Environment env;
 
     private String defaultHeadpic = "/headpics/default_headpic.png";
 
@@ -72,9 +79,60 @@ public class UserServiceImpl implements UserService {
         return user.getEmail();
     }
 
+    /**
+     * 根据用户名/用户邮箱查找用户
+     * @param data
+     * @param isEmail
+     * @return
+     */
+    @Override
+    public List<User> findFriends(String data, boolean isEmail) {
+        List<User> res = new ArrayList<>();
+        if (isEmail){
+            User friend = findByAccount(data);
+            res.add(friend);
+        }else {
+            res = findByName(data);
+        }
+        return res;
+    }
+
+    // 关注用户
+    @Override
+    public void follow(String followedAccount, String followerAccount) {
+        User followed = userRepository.findByEmail(followedAccount);
+        User follwer = userRepository.findByEmail(followerAccount);
+        follwer.follow(followed);
+        userRepository.save(follwer);
+    }
+
+    // 取消关注
+    @Override
+    public void unFollow(String followedAccount, String followerAccount) {
+        User followed = userRepository.findByEmail(followedAccount);
+        User follwer = userRepository.findByEmail(followerAccount);
+        follwer.unFollow(followed);
+        userRepository.save(follwer);
+    }
+
+    // 修改用户头像
+    @Override
+    public String modifyHeadPic(String account, String dataURL) {
+        String newPicURL = ImageUtil.saveBase64Image(dataURL,env.getProperty("upload.path"));
+        userRepository.modifyHeadpic(account,newPicURL);
+        return newPicURL;
+    }
+
+
+    // 根据邮箱查找用户/获取用户个人信息
     @Override
     public User findByAccount(String account) {
         return userRepository.findByEmail(account);
+    }
+
+    @Override
+    public List<User> findByName(String name) {
+        return userRepository.findAllByName(name);
     }
 
 }

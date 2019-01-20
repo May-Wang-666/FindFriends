@@ -22,6 +22,6 @@ public interface GeneralService {
     HomePageInfo getHomePage(String ownerAccount,String visitorAccount);
 
     // 获取留言主页信息
-    ResponseMessages getMessagePage(String ownerAccount, String visitorAccount);
+    ResponseMessages getMessagePage(String ownerAccount, String visitorAccount,int pageNumber);
 
 }
