@@ -58,7 +58,7 @@ public class ImageUtil {
             e.printStackTrace();
         }*/
         //return "http://"+ localIP +":8080/images/"+imgName;
-        return StaticStrings.visitPath + imgName;
+        return StaticValues.visitPath + imgName;
     }
 
 
