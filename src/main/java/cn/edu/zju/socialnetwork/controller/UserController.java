@@ -72,6 +72,7 @@ public class UserController {
     // 注销登录
     @RequestMapping(value = "/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("收到退出登录请求");
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {
             cookies[0].setMaxAge(0); // 使cookie失效
@@ -83,9 +84,8 @@ public class UserController {
     @RequestMapping(value = "/findfriends",method = RequestMethod.GET)
     public List<FriendInfo> findFriends(@RequestBody  HashMap<String, String> data){
         String keyWord = data.get("keyWord");
-        String isEmail = data.get("isEmail");
         System.out.println("查找好友："+keyWord);
-        List<User> users = userService.findFriends(keyWord,Boolean.valueOf(isEmail));
+        List<User> users = userService.findFriends(keyWord);
         if (users == null || users.size() == 0){
             return null;
         } else {

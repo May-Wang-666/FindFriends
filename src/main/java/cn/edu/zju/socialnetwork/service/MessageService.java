@@ -20,4 +20,10 @@ public interface MessageService {
     // 获取某人留言数
     int findTotalMessageByAccount(String account);
 
+    // 根据id获取留言
+    Message findMessageById(Long id);
+
+    // 保存留言
+    void saveMessage(Message message);
+
 }

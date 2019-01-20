@@ -19,4 +19,10 @@ public interface MomentService {
     // 获取某人的当前页动态
     List<Moment> findMyMoments(String account,int pageNumber);
 
+    // 根据id获取动态
+    Moment findMomentById(Long id);
+
+    // 保存动态
+    void saveMoment(Moment moment);
+
 }

@@ -9,6 +9,7 @@ import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.response.HomePageInfo;
 import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.GeneralService;
+import cn.edu.zju.socialnetwork.service.MessageService;
 import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
@@ -38,6 +39,9 @@ public class ServiceTest extends BaseTest {
 
     @Autowired
     MomentService momentService;
+
+    @Autowired
+    MessageService messageService;
 
     @Autowired
     Environment env;
@@ -73,6 +77,14 @@ public class ServiceTest extends BaseTest {
     @Test
     public void test(){
         System.out.println(env.getProperty("visit.path"));
+    }
+
+    @Test
+    public void testCancelLike(){
+        Message message = messageService.findMessageById(Long.valueOf(623));
+        System.out.println(message);
+        Moment moment = momentService.findMomentById(Long.valueOf(467));
+        System.out.println(moment);
     }
 
 

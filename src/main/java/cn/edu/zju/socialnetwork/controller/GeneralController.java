@@ -8,6 +8,7 @@ import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +25,7 @@ public class GeneralController {
     @Autowired
     GeneralService generalService;
 
-    @RequestMapping(value = "/homepage")
+    @RequestMapping(value = "/homepage",method = RequestMethod.POST)
     public HomePageInfo homePage(@RequestBody HashMap<String,String> data, HttpServletRequest request){
         System.out.println(data);
         String owner = data.get("owner");
@@ -45,5 +46,26 @@ public class GeneralController {
         System.out.println("留言板主人："+ownerAccount);
         System.out.println("访问者："+visitor);
         return generalService.getMessagePage(ownerAccount, visitor,1);
+    }
+
+    // 为留言/动态 点赞/取消赞
+    @RequestMapping(value = "like", method = RequestMethod.POST)
+    public void like(@RequestBody HashMap<String,String> data,HttpServletRequest request){
+        System.out.println(data);
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        Long itemId = Long.valueOf(data.get("id").trim());
+        String type = data.get("type");
+        String isCancel = data.get("isCancel");
+        boolean isCancelb = false;
+        if (isCancel.equals("true")){
+            isCancelb = true;
+        }
+        System.out.println("收到 "+type+" 点赞请求，isCancel: "+isCancelb);
+        if (isCancelb){
+            generalService.cancelLike(currentAccount,itemId,type);
+        } else {
+            generalService.like(currentAccount,itemId,type);
+        }
+
     }
 }
