@@ -111,6 +111,24 @@ public class UserController {
         return "success";
     }
 
+    // 显示个人档
+    @RequestMapping(value = "/personal",method = RequestMethod.GET)
+    public User getUserInfo(HttpServletRequest request){
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        return userService.findByAccount(currentAccount);
+    }
+
+    // 修改头像
+    @RequestMapping(value = "/headpic", method = RequestMethod.POST)
+    public HashMap<String,String> modifyHeadpic(@RequestBody HashMap<String, String> data, HttpServletRequest request){
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        String dataURL = data.get("pic");
+        String pic = userService.modifyHeadPic(currentAccount,dataURL);
+        HashMap<String,String> map = new HashMap<>();
+        map.put("newPic", pic);
+        return map;
+    }
+
 
 
 }
