@@ -130,12 +130,6 @@ public class RepositoriesTest extends BaseTest {
     }
 
     @Test
-    public void findMoments(){
-        List<Moment> moments = momentRepository.findFriendsMoments("zqq@wlws.com",0,10);
-        System.out.println(moments.size());
-    }
-
-    @Test
     public void testFindMyMoments(){
         List<String> emails=new ArrayList<>();
         emails.add("zqq@wlws.com");
@@ -144,11 +138,11 @@ public class RepositoriesTest extends BaseTest {
         System.out.println(res.size());
     }
 
-    @Test
-    public void testFindFriendsMoments(){
-        List<Moment> res=momentRepository.findFriendsMoments("sl@wlws.com",0,10);
-        System.out.println(res.size());
-    }
+//    @Test
+//    public void testFindFriendsMoments(){
+//        List<Moment> res=momentRepository.findFriendsMoments("sl@wlws.com",0,10);
+//        System.out.println(res.size());
+//    }
 
     @Test
     public void testFindMessagesByAccount(){

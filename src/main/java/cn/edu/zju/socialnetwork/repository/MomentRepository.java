@@ -35,12 +35,14 @@ public interface MomentRepository extends Neo4jRepository<Moment,Long> {
 
 
     // 返回当前用户及其好友的当前页的动态
+    /*
     @Query("match t= (i:User)-[:is_friends_with]->(myfriends:User) where i.email = {email} " +
             "with nodes(t) AS friends " +
             "match p=(m:Moment)-[b:belongs_to]->(bu:User) where bu in friends with p,b,m order by m.time desc skip {skip} limit {limit} " +
             "optional match (lu:User)-[l:liked]->(m) " +
             "return p,l,lu ")
     List<Moment> findFriendsMoments(@Param("email") String email,@Param("skip") int skip,@Param("limit") int limit);
+    */
 
     // 获取某用户的动态数
     @Query("match (m:Moment)-[:belongs_to]->(u:User) where u.email={email} return count(m)")

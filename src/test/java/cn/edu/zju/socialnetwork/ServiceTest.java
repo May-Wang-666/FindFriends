@@ -9,6 +9,7 @@ import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.response.HomePageInfo;
 import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.GeneralService;
+import cn.edu.zju.socialnetwork.service.MomentService;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,15 @@ public class ServiceTest extends BaseTest {
     @Autowired
     UserRepository userRepository;
 
+
     @Autowired
     MomentRepository momentRepository;
 
     @Autowired
     MessageRepository messageRepository;
+
+    @Autowired
+    MomentService momentService;
 
     @Autowired
     Environment env;
@@ -49,6 +54,15 @@ public class ServiceTest extends BaseTest {
         //List<Moment> moments = momentRepository.findAllByOwnerEmail(zqq.getEmail());
         //List<Moment> moments = momentRepository.findAllByOwner(zqq);
         List<Moment> moments = momentRepository.findAllByOwnerEmailOrderByTimeDesc(zqq.getEmail());
+        System.out.println(moments.size());
+        for (Moment moment:moments){
+            System.out.println(moment);
+        }
+    }
+
+    @Test
+    public void testMomentService(){
+        List<Moment> moments=momentService.findMomentsOfMineAndFriends("zqq@wlws.com",1);
         System.out.println(moments.size());
         for (Moment moment:moments){
             System.out.println(moment);

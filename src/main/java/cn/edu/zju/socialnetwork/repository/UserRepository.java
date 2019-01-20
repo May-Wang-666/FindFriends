@@ -38,11 +38,11 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     /* 以下为暂时没有用到的函数 */
 
     // 返回一个用户的好友列表
-    @Query("match (u:User){email:{email}}-[:is_friends_with]->(p:User) return p")
+    @Query("match (u:User)-[:is_friends_with]->(p:User) where u.email={email} return p")
     List<User> findFriends(@Param("email") String email);
 
     // 修改信息
-    @Query("MATCH (user:User)WHERE user.email={email} SET user.nickname = {nickname},user.sex={sex},user.age={age},user.motto={motto},user.xinzuo={xinzuo} return user")
+    @Query("MATCH (user:User) WHERE user.email={email} SET user.nickname = {nickname},user.sex={sex},user.age={age},user.motto={motto},user.xinzuo={xinzuo} return user")
     User modifyName(@Param("email") String email, @Param("nickname") String nickname, @Param("sex")String sex, @Param("xinzuo")String xinzuo,@Param("age") int age, @Param("motto")String motto);
 
 

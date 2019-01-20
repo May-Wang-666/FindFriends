@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,7 +55,14 @@ public class MomentServiceImp implements MomentService {
     public List<Moment> findMomentsOfMineAndFriends(String account, int pageNumber) {
         int from = StaticStrings.numInOnePage * (pageNumber - 1);
         int to = StaticStrings.numInOnePage * pageNumber;
-        return momentRepository.findFriendsMoments(account,from,to);
+
+        // 因findFriendsMoments接口问题，分两步获取
+        List<User> users=userRepository.findFriends(account);
+        List<String> emails=new ArrayList<>();
+        for (User user:users){
+            emails.add(user.getEmail());
+        }
+        return momentRepository.findMomentsByUsers(emails,from,to);
     }
 
     // 获取一个人的某一页动态
