@@ -11,7 +11,7 @@ import java.util.List;
 public interface MomentRepository extends Neo4jRepository<Moment,Long> {
 
     // 根据id获取动态
-    @Query("match (m:Moment) where ID(m)={id} return m")
+    @Query("match p=(:User)<-[:belongs_to]-(m:Moment)<-[:liked]-(:User) where ID(m)={id} return p")
     Moment findMomentById(@Param("id") Long id);
 
     List<Moment> findAllByOwnerEmailOrderByTimeDesc(@Param("ownerEmial") String email);

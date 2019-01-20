@@ -33,6 +33,13 @@ public class CookieFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
+        // 如果是预检请求，直接放行～
+        if (request.getMethod().equals("OPTIONS")){
+            System.out.println("收到一个预检请求");
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
         boolean isExcludedPage = false;
         for (String page : excludedPageArray) {// 遍历例外url数组
             // 判断当前URL是否与例外页面相同

@@ -17,7 +17,7 @@ public interface UserService {
     String login(String account, String password);
 
     // 根据邮箱或姓名查找用户
-    List<User> findFriends(String data, boolean isEmail);
+    List<User> findFriends(String keyWord);
 
     // 一个用户关注另一个用户
     void follow(String followedAccount, String followerAccount);

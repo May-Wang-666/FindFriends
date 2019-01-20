@@ -38,14 +38,36 @@ public class GeneralServiceImp implements GeneralService {
     @Autowired
     MessageService messageService;
 
+    // 为动态/留言点赞
     @Override
     public Boolean like(String userAccount, Long itemId, String type) {
-        return null;
+        User currentUser = userService.findByAccount(userAccount);
+        if (type.equals("moment")){
+            Moment moment = momentService.findMomentById(itemId);
+            moment.likedByUser(currentUser);
+            momentService.saveMoment(moment);
+        } else if (type.equals("message")){
+            Message message = messageService.findMessageById(itemId);
+            message.likedByUser(currentUser);
+            messageService.saveMessage(message);
+        }
+        return true;
     }
 
+    // 取消动态/留言点赞
     @Override
     public Boolean cancelLike(String userAccount, Long itemId, String type) {
-        return null;
+        if (type.equals("moment")){
+            Moment moment = momentService.findMomentById(itemId);
+            moment.cancledLikeBy(userAccount);
+            momentService.saveMoment(moment);
+        } else if (type.equals("message")){
+            Message message = messageService.findMessageById(itemId);
+            System.out.println(message);
+            message.cancledLikeBy(userAccount);
+            messageService.saveMessage(message);
+        }
+        return true;
     }
 
     /**

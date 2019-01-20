@@ -81,19 +81,17 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 根据用户名/用户邮箱查找用户
-     * @param data
-     * @param isEmail
+     *
+     * @param keyWord
      * @return
      */
     @Override
-    public List<User> findFriends(String data, boolean isEmail) {
+    public List<User> findFriends(String keyWord) {
         List<User> res = new ArrayList<>();
-        if (isEmail){
-            User friend = findByAccount(data);
-            res.add(friend);
-        }else {
-            res = findByName(data);
-        }
+        User byEmail = findByAccount(keyWord);
+        res.add(byEmail);
+        List<User> byName = findByName(keyWord);
+        res.addAll(byName);
         return res;
     }
 
@@ -118,8 +116,8 @@ public class UserServiceImpl implements UserService {
     // 修改用户头像
     @Override
     public String modifyHeadPic(String account, String dataURL) {
-        String newPicURL = ImageUtil.saveBase64Image(dataURL,env.getProperty("upload.path"));
-        userRepository.modifyHeadpic(account,newPicURL);
+        String newPicURL = ImageUtil.saveBase64Image(dataURL, env.getProperty("upload.path"));
+        userRepository.modifyHeadpic(account, newPicURL);
         return newPicURL;
     }
 

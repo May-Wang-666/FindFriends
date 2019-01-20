@@ -59,6 +59,7 @@ public class MomentServiceImp implements MomentService {
         // 因findFriendsMoments接口问题，分两步获取
         List<User> users=userRepository.findFriends(account);
         List<String> emails=new ArrayList<>();
+        emails.add(account);
         for (User user:users){
             emails.add(user.getEmail());
         }
@@ -72,5 +73,15 @@ public class MomentServiceImp implements MomentService {
         System.out.println(from);
         int to = StaticStrings.numInOnePage * pageNumber;
         return momentRepository.findMyMoments(account,from,to);
+    }
+
+    @Override
+    public Moment findMomentById(Long id) {
+        return momentRepository.findMomentById(id);
+    }
+
+    @Override
+    public void saveMoment(Moment moment) {
+        momentRepository.save(moment);
     }
 }

@@ -43,6 +43,7 @@ public class MessageServiceImp implements MessageService {
             return "invalid toAccount";
         }
         Message newMessage = new Message(text, time, from);
+        newMessage.setOwner(from);
         to.addMessage(newMessage);
         messageRepository.save(newMessage);
         userRepository.save(to);
@@ -73,5 +74,15 @@ public class MessageServiceImp implements MessageService {
     @Override
     public int findTotalMessageByAccount(String account) {
         return messageRepository.findTotalMessageByEmail(account);
+    }
+
+    @Override
+    public Message findMessageById(Long id) {
+        return messageRepository.findMessageById(id);
+    }
+
+    @Override
+    public void saveMessage(Message message) {
+        messageRepository.save(message);
     }
 }
