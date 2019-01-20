@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -63,9 +65,14 @@ public class MessageController {
     // 返回留言时已经给出是否可以删除字段
     // 删除权限由前端控制
     @RequestMapping(value = "/delete")
-    public String delete(@RequestBody HashMap<String,String> data, HttpServletRequest request) {
+    public String delete(@RequestBody HashMap<String,String> data, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = data.get("id");
-        return messageService.deleteMessage(Long.parseLong(id.trim()),request);
+        if (id == null || id.equals("")){
+            response.sendError(488,"received id is null");
+            return null;
+        }
+        String totalMessages = messageService.deleteMessage(Long.parseLong(id.trim()),request);
+        return totalMessages;
     }
 
 }
