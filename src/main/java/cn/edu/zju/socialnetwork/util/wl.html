@@ -8,13 +8,14 @@
 
 </head>
 <body>
+<img src="http://192.168.1.101:8080/headpics/default_headpic.png">
 
 <button onclick="ajaxRequestByJQuery()">ajax请求(JQuery)</button>
 <button onclick="ajaxRequestByJS()">ajax请求(JS)</button>
 <button onclick="fetchRequest()">fetch请求</button>
 <script>
 
-    let requrl=`192.168.1.105:8080/look/homepage`;
+    let requrl=`http://http://47.100.226.85:8080/find-friends/user/login`;
     let reqdata={"email":"sl@wlws.com","password":"123456"};
 
     function fetchRequest() {

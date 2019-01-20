@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 @Order(2)
-@WebFilter(filterName = "cookieFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "EXCLUDED_PAGES", value = "/user/validemail;/user/login")})
+@WebFilter(filterName = "cookieFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "EXCLUDED_PAGES", value = "/user/validemail;/user/login;")})
 public class CookieFilter implements Filter {
 
     private String excludedPages;
@@ -36,6 +36,13 @@ public class CookieFilter implements Filter {
         // 如果是预检请求，直接放行～
         if (request.getMethod().equals("OPTIONS")){
             System.out.println("收到一个预检请求");
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        // 图片请求，直接放行
+        if (request.getServletPath().startsWith("/headpics") || request.getServletPath().startsWith("/uploaded")){
+            System.out.println("收到图片请求");
             filterChain.doFilter(servletRequest, servletResponse);
             return;
         }
