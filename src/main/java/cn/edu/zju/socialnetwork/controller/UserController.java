@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -54,6 +55,11 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(@RequestBody HashMap<String,String> loginInfo, HttpServletResponse response) {
         System.out.println("收到登录请求");
+
+        for (Map.Entry<String,String> entry:loginInfo.entrySet()){
+            System.out.println("key:"+entry.getKey()+";value:"+entry.getValue());
+        }
+
         String email = loginInfo.get("email");
         String password = loginInfo.get("password");
         String res = userService.login(email, password);

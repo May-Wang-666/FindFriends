@@ -9,12 +9,17 @@
 </head>
 <body>
 
+<h4>默认请求</h4>
 <button onclick="ajaxRequestByJQuery()">ajax请求(JQuery)</button>
 <button onclick="ajaxRequestByJS()">ajax请求(JS)</button>
 <button onclick="fetchRequest()">fetch请求</button>
+<h4>动态请求</h4>
+<label>URL</label> <input type="text" id="i_url" style="width: 1080px"><br>
+<label>参数</label> <input type="text" id="i_data" style="width: 1080px"><br>
+<button onclick="dynamicRequest()">Ajax请求</button>
 <script>
 
-    let requrl=`192.168.1.105:8080/look/homepage`;
+    let requrl=`http://47.100.226.85:8080/find-friends:8080/user/login`;
     let reqdata={"email":"sl@wlws.com","password":"123456"};
 
     function fetchRequest() {
@@ -70,6 +75,32 @@
         xmlHttp.withCredentials=true;
         // 4. 发送请求
         xmlHttp.send(JSON.stringify(reqdata));
+
+    }
+    
+    function dynamicRequest() {
+        let url=document.getElementById("i_url").value;
+        let data=document.getElementById("i_data").value;
+
+        console.log(data);
+        console.log(JSON.stringify(data));
+
+        // 1. 创建请求对象
+        let xmlHttp=new XMLHttpRequest();
+        // 2. 注册回调函数
+        xmlHttp.onreadystatechange=function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status==200){
+                console.log("JS Ajax 请求成功！");
+                let res=xmlHttp.responseText;
+                console.log(res);
+            }
+        };
+        // 3. 配置请求信息
+        xmlHttp.open("POST",url);
+        xmlHttp.setRequestHeader("Content-Type","application/json; charset=utf-8");
+        xmlHttp.withCredentials=true;
+        // 4. 发送请求
+        xmlHttp.send(data);
 
     }
 
