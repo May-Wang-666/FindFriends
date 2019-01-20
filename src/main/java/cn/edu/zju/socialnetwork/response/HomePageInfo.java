@@ -21,7 +21,7 @@ public class HomePageInfo {
     // 动态列表
     private List<AdditionalMoment> dongtailist;
     // 是否最后一页，默认为false
-    private boolean isLastPageOfMoment;
+    private boolean isLastPage;
 
 
     public HomePageInfo() {
@@ -39,19 +39,19 @@ public class HomePageInfo {
         }
         statics = new StaticInfo(numOfMoments, numOfMessages);
         dongtailist = moments;
-        isLastPageOfMoment = false;
+        isLastPage = false;
     }
 
-    public HomePageInfo(Person personal, List<Friend> friends, StaticInfo statics, List<AdditionalMoment> dongtailist, boolean isLastPageOfMoment) {
+    public HomePageInfo(Person personal, List<Friend> friends, StaticInfo statics, List<AdditionalMoment> dongtailist, boolean isLastPage) {
         this.personal = personal;
         this.friends = friends;
         this.statics = statics;
         this.dongtailist = dongtailist;
-        this.isLastPageOfMoment = isLastPageOfMoment;
+        this.isLastPage = isLastPage;
     }
 
-    public void setLastPageOfMoment(boolean lastPageOfMoment) {
-        isLastPageOfMoment = lastPageOfMoment;
+    public void setLastPage(boolean lastPage) {
+        isLastPage = lastPage;
     }
 
     @Getter

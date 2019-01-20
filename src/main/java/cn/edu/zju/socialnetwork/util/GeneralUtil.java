@@ -19,18 +19,12 @@ public class GeneralUtil {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
-                System.out.println(cookie.getValue());
                 if (cookie.getName().equals("loginAccount")) {
                     return cookie.getValue();
                 }
             }
         }
         return "please login first";
-    }
-
-    // 拒绝处理没有携带cookie的请求
-    public static void CheckCookie(String cookieStatus, HttpServletResponse response){
-
     }
 
     // 判断一个用户是否在用户集合中

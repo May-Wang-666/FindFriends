@@ -5,7 +5,6 @@ import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
 import cn.edu.zju.socialnetwork.response.FriendInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
-import cn.edu.zju.socialnetwork.util.ImageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +41,8 @@ public class UserController {
     // 注册
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@RequestBody RegisterUserInfo userInfo) {
-        System.out.println(userInfo);
         String res = userService.register(userInfo);
-        System.out.println(res);
+        System.out.println("收到注册请求");
         if (res.equals("internal error")) {
             return "sorry, server sucks";
         }
@@ -53,7 +51,7 @@ public class UserController {
 
     // 登录
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(@RequestBody HashMap<String,String> loginInfo, HttpServletResponse response) {
+    public String login(@RequestBody HashMap<String, String> loginInfo, HttpServletResponse response) {
         System.out.println("收到登录请求");
 
         for (Map.Entry<String,String> entry:loginInfo.entrySet()){
@@ -87,54 +85,72 @@ public class UserController {
     }
 
     // 查找好友
-    @RequestMapping(value = "/findfriends",method = RequestMethod.GET)
-    public List<FriendInfo> findFriends(@RequestBody  HashMap<String, String> data){
-        String keyWord = data.get("keyWord");
-        System.out.println("查找好友："+keyWord);
-        List<User> users = userService.findFriends(keyWord);
-        if (users == null || users.size() == 0){
-            return null;
-        } else {
-            List<FriendInfo> friendInfos = new ArrayList<>();
-            for (User user:users){
-                friendInfos.add(new FriendInfo(user.getEmail(),user.getName(),user.getHeadpic()));
-            }
-            return friendInfos;
-        }
+    @RequestMapping(value = "/findfriends")
+    public List<FriendInfo> findFriends(@RequestBody HashMap<String, String> data, HttpServletRequest request) {
+        System.out.println("收到查找好友请求");
+        String keyWord = data.get("keyWord").trim();
+        System.out.println(data);
+        System.out.println("查找好友：" + keyWord);
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        List<FriendInfo> friends = userService.findFriends(keyWord, currentAccount);
+        return friends;
     }
 
     // 关注/取消关注好友
-    @RequestMapping(value = "/makeFriends", method = RequestMethod.POST)
-    public String follow(@RequestBody HashMap<String,String> data, HttpServletRequest request){
+    @RequestMapping(value = "/makefriends", method = RequestMethod.POST)
+    public String follow(@RequestBody HashMap<String, String> data, HttpServletRequest request) {
         String followedAccount = data.get("email");
         String followerAccount = GeneralUtil.getCurrentUserFromCookie(request);
-        boolean isUnfollow = Boolean.valueOf(data.get("isDelete"));
-        if (isUnfollow){
-            userService.unFollow(followedAccount,followerAccount);
+        boolean isUnfollow = Boolean.parseBoolean(data.get("isDelete"));
+        System.out.println("收到加好友请求，isDelete: " + isUnfollow);
+        if (isUnfollow) {
+            userService.unFollow(followedAccount, followerAccount);
+
         } else {
-            userService.follow(followedAccount,followerAccount);
+            if (followedAccount.equals(followerAccount)) {
+                return "can't follow yourself";
+            }
+            userService.follow(followedAccount, followerAccount);
         }
         return "success";
     }
 
     // 显示个人档
-    @RequestMapping(value = "/personal",method = RequestMethod.GET)
-    public User getUserInfo(HttpServletRequest request){
+    @RequestMapping(value = "/personal", method = RequestMethod.GET)
+    public User getUserInfo(HttpServletRequest request) {
+        System.out.println("收到个人档请求");
         String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
         return userService.findByAccount(currentAccount);
     }
 
     // 修改头像
     @RequestMapping(value = "/headpic", method = RequestMethod.POST)
-    public HashMap<String,String> modifyHeadpic(@RequestBody HashMap<String, String> data, HttpServletRequest request){
+    public HashMap<String, String> modifyHeadpic(@RequestBody HashMap<String, String> data, HttpServletRequest request) {
+        System.out.println("收到换头像请求");
         String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
         String dataURL = data.get("pic");
-        String pic = userService.modifyHeadPic(currentAccount,dataURL);
-        HashMap<String,String> map = new HashMap<>();
+        String pic = userService.modifyHeadPic(currentAccount, dataURL);
+        HashMap<String, String> map = new HashMap<>();
         map.put("newPic", pic);
         return map;
     }
 
-
-
+    // 修改个人信息
+    @RequestMapping(value = "/personal", method = RequestMethod.POST)
+    public String updatePersonalInfo(@RequestBody HashMap<String, String> data, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("收到修改个人信息请求");
+        System.out.println(data);
+        String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
+        String nickname = data.get("nickname");
+        String sex = data.get("sex");
+        String xinzuo = data.get("xinzuo");
+        String motto = data.get("motto");
+        String ageStr = data.get("age");
+        if (ageStr == null || ageStr.equals("")) {
+            response.sendError(488, "please tell me how old are you");
+            return "invalid parameter";
+        }
+        int age = Integer.valueOf(ageStr.trim());
+        return userService.updatePersonalInfo(currentAccount, nickname, sex, xinzuo, age, motto);
+    }
 }

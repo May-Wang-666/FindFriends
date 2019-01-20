@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MomentServiceImp implements MomentService {
@@ -57,11 +58,14 @@ public class MomentServiceImp implements MomentService {
         int to = StaticValues.numInOnePage * pageNumber;
 
         // 因findFriendsMoments接口问题，分两步获取
-        List<User> users=userRepository.findFriends(account);
+        User currentUser = userRepository.findByEmail(account);
+        Set<User> users = currentUser.getFriends();
         List<String> emails=new ArrayList<>();
         emails.add(account);
-        for (User user:users){
-            emails.add(user.getEmail());
+        if (users != null && users.size() != 0){
+            for (User user:users){
+                emails.add(user.getEmail());
+            }
         }
         return momentRepository.findMomentsByUsers(emails,from,to);
     }
@@ -83,5 +87,25 @@ public class MomentServiceImp implements MomentService {
     @Override
     public void saveMoment(Moment moment) {
         momentRepository.save(moment);
+    }
+
+    @Override
+    public int findNumOfMyMoments(String account) {
+        return momentRepository.findNumOfMoments(account);
+    }
+
+    @Override
+    public int findNumOfFriendsMoments(String account) {
+        User currentUser = userRepository.findByEmail(account);
+        // 自己的动态条数
+        int sum = momentRepository.findNumOfMoments(account);
+        // 加上好友的动态条数
+        Set<User> users = currentUser.getFriends();
+        if (users != null && users.size() != 0){
+            for (User user:users){
+                sum += momentRepository.findNumOfMoments(user.getEmail());
+            }
+        }
+        return sum;
     }
 }

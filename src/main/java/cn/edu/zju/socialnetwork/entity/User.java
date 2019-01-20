@@ -153,6 +153,9 @@ public class User {
     }
 
     public Set<User> getFriends() {
+        if (friends == null){
+            return new HashSet<>();
+        }
         return friends;
     }
 

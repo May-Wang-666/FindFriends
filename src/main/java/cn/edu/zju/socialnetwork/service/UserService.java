@@ -2,6 +2,7 @@ package cn.edu.zju.socialnetwork.service;
 
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
+import cn.edu.zju.socialnetwork.response.FriendInfo;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface UserService {
     String login(String account, String password);
 
     // 根据邮箱或姓名查找用户
-    List<User> findFriends(String keyWord);
+    List<FriendInfo> findFriends(String keyWord, String currentAccount);
 
     // 一个用户关注另一个用户
     void follow(String followedAccount, String followerAccount);
@@ -27,6 +28,9 @@ public interface UserService {
 
     // 修改用户头像
     String modifyHeadPic(String account, String dataURL);
+
+    // 修改用户个人信息
+    String updatePersonalInfo(String account,String nickname,String sex, String xinzuo, int age, String motto);
 
 
     // 根据Email查找用户

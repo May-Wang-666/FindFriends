@@ -27,8 +27,6 @@ public class ImageUtil {
 
         // 解码base64编码，保存本地文件
         String base64 = dataURL.substring(dataURL.indexOf(",") + 1);
-        System.out.println("base64编码：");
-        System.out.println(base64);
         try {
             File newFile = new File(path + imgName);
             // 检查是否存在目录
@@ -50,14 +48,6 @@ public class ImageUtil {
             System.out.println("IOException: 写文件出错！");
             e2.printStackTrace();
         }
-        // 返回本地文件的访问路径
-        /*String localIP = null;
-        try {
-            localIP = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }*/
-        //return "http://"+ localIP +":8080/images/"+imgName;
         return StaticValues.visitPath + imgName;
     }
 

@@ -38,9 +38,9 @@ public class MomentController {
     @RequestMapping(value = "/refresh")
     public ResponseMoments momentRefresh(@RequestBody HashMap<String,String> data, HttpServletRequest request, HttpServletResponse response){
         // 发表动态
-        System.out.println(request.getMethod());
         System.out.println(data);
-        if (request.getMethod().equals(String.valueOf(RequestMethod.POST))){
+        String isPublish = data.get("isPublish");
+        if (isPublish.equals("true")){
             System.out.println("收到发表动态请求：");
             String account = GeneralUtil.getCurrentUserFromCookie(request);
             User currentUser = userService.findByAccount(account);
@@ -49,27 +49,32 @@ public class MomentController {
             publishMoment(account,content,pic);
             List<Moment> newMoments = momentService.findMomentsOfMineAndFriends(account,1);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,currentUser);
-            if (newMoments.size() < StaticValues.numInOnePage){
+            int totalMoment = momentService.findNumOfFriendsMoments(account);
+            if (totalMoment <= StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);
             }
         }
         // 请求分页动态
-        if (request.getMethod().equals(String.valueOf(RequestMethod.GET))){
+        if (isPublish.equals("false")){
             System.out.println("收到动态分页请求：");
             String pageNumber = data.get("pageNumber");
             String ownerAccount = data.get("ownerAccount");
             String visitorAccount = GeneralUtil.getCurrentUserFromCookie(request);
             List<Moment> newMoments;
+            int totalMoments;
             if(ownerAccount.equals(visitorAccount)){
                 newMoments = momentService.findMomentsOfMineAndFriends(ownerAccount,Integer.valueOf(pageNumber));
+                totalMoments = momentService.findNumOfFriendsMoments(ownerAccount);
             } else {
                 newMoments = momentService.findMyMoments(ownerAccount,Integer.valueOf(pageNumber));
+                totalMoments = momentService.findNumOfMyMoments(ownerAccount);
             }
             User visitor = userService.findByAccount(visitorAccount);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,visitor);
-            if (newMoments.size() < StaticValues.numInOnePage){
+            int leftMoments = totalMoments - StaticValues.numInOnePage * Integer.valueOf(pageNumber);
+            if (leftMoments <= StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);

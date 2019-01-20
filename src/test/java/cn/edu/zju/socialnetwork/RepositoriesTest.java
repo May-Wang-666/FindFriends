@@ -6,13 +6,10 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MessageRepository;
 import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
-import cn.edu.zju.socialnetwork.request.LoginInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -54,8 +51,7 @@ public class RepositoriesTest extends BaseTest {
         return "http://"+localAddress+":8080/find-friends/headpics/"+randomPics[index];
     }
 
-
-    @Test
+    //@Test
     public void testRepositories() {
         userRepository.deleteAll();
         momentRepository.deleteAll();
@@ -93,7 +89,7 @@ public class RepositoriesTest extends BaseTest {
         userRepository.save(sl);
     }
 
-    @Test
+    //@Test
     public void addMessages(){
         User sl = userRepository.findByEmail("sl@wlws.com");
         User wlh = userRepository.findByEmail("wlh@wlws.com");
@@ -111,7 +107,7 @@ public class RepositoriesTest extends BaseTest {
         System.out.println("插入成功");
     }
 
-    @Test
+    //@Test
     public void addUser(){
         User fn = new User("123@wlws.com", "123456", "封楠小撒叽", getRandomHeadPic(), "哐哐哐", "女", 22, "天蝎座");
         userRepository.save(fn);
@@ -126,23 +122,12 @@ public class RepositoriesTest extends BaseTest {
     @Test
     public void findAllByName(){
         List<User> users = userRepository.findAllByName("朱七七");
+        for (User user:users){
+            System.out.println(user);
+        }
         System.out.println(users.size());
     }
 
-    @Test
-    public void testFindMyMoments(){
-        List<String> emails=new ArrayList<>();
-        emails.add("zqq@wlws.com");
-        emails.add("sl@wlws.com");
-        List<Moment> res=momentRepository.findMomentsByUsers(emails,0,10);
-        System.out.println(res.size());
-    }
-
-//    @Test
-//    public void testFindFriendsMoments(){
-//        List<Moment> res=momentRepository.findFriendsMoments("sl@wlws.com",0,10);
-//        System.out.println(res.size());
-//    }
 
     @Test
     public void testFindMessagesByAccount(){

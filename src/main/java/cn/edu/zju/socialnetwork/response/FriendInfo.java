@@ -11,6 +11,9 @@ public class FriendInfo {
     private String name;
     private String headpic;
 
+    // 是否已经是你的好友
+    private boolean isFriends;
+
     public FriendInfo(String email, String name, String headpic) {
         this.email = email;
         this.name = name;
@@ -18,5 +21,9 @@ public class FriendInfo {
     }
 
     public FriendInfo() {
+    }
+
+    public void setFriends(boolean friends) {
+        isFriends = friends;
     }
 }
