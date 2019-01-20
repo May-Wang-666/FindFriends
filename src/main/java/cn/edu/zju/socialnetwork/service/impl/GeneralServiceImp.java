@@ -11,7 +11,9 @@ import cn.edu.zju.socialnetwork.response.HomePageInfo;
 import cn.edu.zju.socialnetwork.response.AdditionalMoment;
 import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.GeneralService;
+import cn.edu.zju.socialnetwork.service.MessageService;
 import cn.edu.zju.socialnetwork.service.MomentService;
+import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,13 @@ public class GeneralServiceImp implements GeneralService {
     UserRepository userRepository;
 
     @Autowired
-    MessageRepository messageRepository;
+    UserService userService;
 
     @Autowired
     MomentService momentService;
+
+    @Autowired
+    MessageService messageService;
 
     @Override
     public Boolean like(String userAccount, Long itemId, String type) {
@@ -53,8 +58,8 @@ public class GeneralServiceImp implements GeneralService {
      */
     @Override
     public HomePageInfo getHomePage(String ownerAccount, String visitorAccount) {
-        User owner = userRepository.findByEmail(ownerAccount);
-        User visitor = userRepository.findByEmail(visitorAccount);
+        User owner = userService.findByAccount(ownerAccount);
+        User visitor = userService.findByAccount(visitorAccount);
         // 用户的好友列表
         Set<User> friends = owner.getFriends();
         if (friends == null){
@@ -92,11 +97,11 @@ public class GeneralServiceImp implements GeneralService {
      * @return 有留言，List<AdditionalMessage> 没有留言，size为0的list
      */
     @Override
-    public ResponseMessages getMessagePage(String ownerAccount, String visitorAccount) {
-        User owner = userRepository.findByEmail(ownerAccount);
-        User visitor = userRepository.findByEmail(visitorAccount);
-        List<Message> messages = messageRepository.findMessagesByAccount(ownerAccount,1);
-        int totalMessage = messages.size();
+    public ResponseMessages getMessagePage(String ownerAccount, String visitorAccount,int pageNumber) {
+        User owner = userService.findByAccount(ownerAccount);
+        User visitor = userService.findByAccount(visitorAccount);
+        List<Message> messages = messageService.findMessagesByAccount(ownerAccount,pageNumber);
+        int totalMessage = messageService.findTotalMessageByAccount(ownerAccount);
         System.out.println("留言数：" + totalMessage);
         List<AdditionalMessage> additionalMessages = GeneralUtil.addInfoIntoMessages(messages,owner,visitor);
         return new ResponseMessages(owner.getName(),owner.getHeadpic(), additionalMessages,totalMessage);

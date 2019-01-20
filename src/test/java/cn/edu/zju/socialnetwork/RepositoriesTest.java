@@ -92,16 +92,6 @@ public class RepositoriesTest extends BaseTest {
     }
 
     @Test
-    public void testUserRepository() {
-        List<Moment> moments = userRepository.findMyMoments("zqq@wlws.com",1);
-        // List<Message> messages = userRepository.findMessagesByAccount("sl@wlws.com");
-        for (Moment moment : moments) {
-            System.out.println(moment);
-        }
-        //System.out.println("留言数："+messages.size());
-    }
-
-    @Test
     public void addMessages(){
         User sl = userRepository.findByEmail("sl@wlws.com");
         User wlh = userRepository.findByEmail("wlh@wlws.com");
@@ -132,8 +122,14 @@ public class RepositoriesTest extends BaseTest {
     }
 
     @Test
+    public void findAllByName(){
+        List<User> users = userRepository.findAllByName("朱七七");
+        System.out.println(users.size());
+    }
+
+    @Test
     public void findMoments(){
-        List<Moment> moments = momentRepository.findFriendsMoments("sl@wlws.com",0,100);
+        List<Moment> moments = momentRepository.findFriendsMoments("zqq@wlws.com",0,10);
         System.out.println(moments.size());
     }
 

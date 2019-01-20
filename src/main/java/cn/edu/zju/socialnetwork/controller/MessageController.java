@@ -37,26 +37,35 @@ public class MessageController {
         String reqMethod = request.getMethod();
         // 发表留言
         if (reqMethod.equals(String.valueOf(RequestMethod.POST))) {
+            System.out.println("收到发表留言请求：");
             String toAccount = data.get("toAccount");
             String text = data.get("text");
+            System.out.println("toAccount"+toAccount);
+            System.out.println("text: "+text);
             String time = String.valueOf(System.currentTimeMillis());
             String fromAccount = GeneralUtil.getCurrentUserFromCookie(request);
             messageService.leaveMessage(fromAccount, toAccount, text, time);
-            return generalService.getMessagePage(toAccount, fromAccount);
-           /*
-           List<Message> newMessages = messageService.findMessagesByAccount(toAccount,1);
-           User owner = userService.findByAccount(toAccount);
-            User visitor = userService.findByAccount(fromAccount);
-            return GeneralUtil.addInfoIntoMessages(newMessages,owner,visitor);*/
+            return generalService.getMessagePage(toAccount, fromAccount,1);
+        }
+        // 分页留言
+        if (reqMethod.equals(String.valueOf(RequestMethod.GET))){
+            System.out.println("收到分页留言请求：");
+            String ownerAccount = data.get("ownerAccount");
+            String pageNumber = data.get("pageNumber");
+            String visitorAccount = GeneralUtil.getCurrentUserFromCookie(request);
+            return generalService.getMessagePage(ownerAccount,visitorAccount,Integer.valueOf(pageNumber));
         }
         return null;
     }
 
 
     // 删除留言
+    // 返回留言时已经给出是否可以删除字段
+    // 删除权限由前端控制
     @RequestMapping(value = "/delete")
-    public String delete(@RequestBody String id) {
-        return messageService.deleteMessage(Long.parseLong(id));
+    public String delete(@RequestBody HashMap<String,String> data, HttpServletRequest request) {
+        String id = data.get("id");
+        return messageService.deleteMessage(Long.parseLong(id.trim()),request);
     }
 
 }

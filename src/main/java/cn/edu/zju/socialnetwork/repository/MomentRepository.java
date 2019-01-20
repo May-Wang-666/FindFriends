@@ -14,16 +14,7 @@ public interface MomentRepository extends Neo4jRepository<Moment,Long> {
     @Query("match (m:Moment) where ID(m)={id} return m")
     Moment findMomentById(@Param("id") Long id);
 
-
     List<Moment> findAllByOwnerEmailOrderByTimeDesc(@Param("ownerEmial") String email);
-
-/*    // 返回当前用户及其好友的所有动态
-    @Query("match t= (i:User)-[:is_friends_with]->(myfriends:User) where i.email = {email} " +
-            "with nodes(t) AS friends " +
-            "match p=(m:Moment)-[b:belongs_to]->(bu:User) where bu in friends with p,m,b " +
-            "optional match (lu:User)-[l:liked]->(m) " +
-            "return p,l,lu order by m.time skip {from} limit {to}")
-    List<Moment> findFriendsMoments(String email, int from, int to);*/
 
     /**
      * 根据用户Email列表查询这些用户所发的朋友圈，结果按时间排序，带有分页功能
@@ -38,18 +29,22 @@ public interface MomentRepository extends Neo4jRepository<Moment,Long> {
 
 
     // 返回当前用户当前页的动态
-    @Query("match p=(m:Moment)-[b:belongs_to]->(owner:User) where owner.email={email} with p,m,b,owner "+
-            "optional match (lu:User)-[l:liked]->(m) return p,l,lu order by m.time desc skip {skip} limit {limit}")
-    List<Moment> findMyMoments(@Param("email") String email,@Param("skip") int skip,@Param("limit") int limi);
+    @Query("match p=(m:Moment)-[b:belongs_to]->(owner:User) where owner.email={email} with p,b,owner, m order by m.time desc skip {skip} limit {limit} "+
+            "optional match (lu:User)-[l:liked]->(m) return p,l,lu ")
+    List<Moment> findMyMoments(@Param("email") String email,@Param("skip") int skip,@Param("limit") int limit);
 
 
     // 返回当前用户及其好友的当前页的动态
     @Query("match t= (i:User)-[:is_friends_with]->(myfriends:User) where i.email = {email} " +
             "with nodes(t) AS friends " +
-            "match p=(m:Moment)-[b:belongs_to]->(bu:User) where bu in friends with p,m,b " +
+            "match p=(m:Moment)-[b:belongs_to]->(bu:User) where bu in friends with p,b,m order by m.time desc skip {skip} limit {limit} " +
             "optional match (lu:User)-[l:liked]->(m) " +
-            "return p,l,lu order by m.time skip {skip} limit {limit}")
+            "return p,l,lu ")
     List<Moment> findFriendsMoments(@Param("email") String email,@Param("skip") int skip,@Param("limit") int limit);
+
+    // 获取某用户的动态数
+    @Query("match (m:Moment)-[:belongs_to]->(u:User) where u.email={email} return count(m)")
+    int findNumOfMoments(@Param("email") String email);
 
 
 }

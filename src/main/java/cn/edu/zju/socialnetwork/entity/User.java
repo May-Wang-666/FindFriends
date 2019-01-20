@@ -69,6 +69,24 @@ public class User {
         user.getFriends().add(this);
     }
 
+    // 单方面加好友，关注功能
+    public void follow(User user){
+        friends.add(user);
+    }
+
+    // 取消关注
+    public void unFollow(User user){
+        Iterator<User> iterator = friends.iterator();
+        while (iterator.hasNext()){
+            User tmp = iterator.next();
+            if (tmp.getId() == user.getId()){
+                iterator.remove();
+                break;
+            }
+        }
+        System.out.println("您还没有关注 "+user.getEmail());
+    }
+
     // 获得一个留言
     public void addMessage(Message message){
         if (messages == null){
