@@ -5,6 +5,7 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MessageRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.service.MessageService;
+import cn.edu.zju.socialnetwork.util.StaticStrings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,8 @@ public class MessageServiceImp implements MessageService {
 
     @Override
     public List<Message> findMessagesByAccount(String account, int pageNumber) {
-        return messageRepository.findMessagesByAccount(account,pageNumber);
+        int form = StaticStrings.numInOnePage * (pageNumber-1);
+        int to = StaticStrings.numInOnePage * pageNumber;
+        return messageRepository.findMessagesByAccount(account,form,to);
     }
 }

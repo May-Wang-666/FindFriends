@@ -95,7 +95,7 @@ public class GeneralServiceImp implements GeneralService {
     public ResponseMessages getMessagePage(String ownerAccount, String visitorAccount) {
         User owner = userRepository.findByEmail(ownerAccount);
         User visitor = userRepository.findByEmail(visitorAccount);
-        List<Message> messages = messageRepository.findMessagesByAccount(ownerAccount,1);
+        List<Message> messages = messageRepository.findMessagesByAccount(ownerAccount,0,1);
         int totalMessage = messages.size();
         System.out.println("留言数：" + totalMessage);
         List<AdditionalMessage> additionalMessages = GeneralUtil.addInfoIntoMessages(messages,owner,visitor);

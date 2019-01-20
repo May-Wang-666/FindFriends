@@ -6,12 +6,14 @@ import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.MessageRepository;
 import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
+import cn.edu.zju.socialnetwork.request.LoginInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -135,6 +137,27 @@ public class RepositoriesTest extends BaseTest {
     public void findMoments(){
         List<Moment> moments = momentRepository.findFriendsMoments("sl@wlws.com",0,100);
         System.out.println(moments.size());
+    }
+
+    @Test
+    public void testFindMyMoments(){
+        List<String> emails=new ArrayList<>();
+        emails.add("zqq@wlws.com");
+        emails.add("sl@wlws.com");
+        List<Moment> res=momentRepository.findMomentsByUsers(emails,0,10);
+        System.out.println(res.size());
+    }
+
+    @Test
+    public void testFindFriendsMoments(){
+        List<Moment> res=momentRepository.findFriendsMoments("sl@wlws.com",0,10);
+        System.out.println(res.size());
+    }
+
+    @Test
+    public void testFindMessagesByAccount(){
+        List<Message> res=messageRepository.findMessagesByAccount("sl@wlws.com",0,11);
+        System.out.println(res.size());
     }
 
 }
