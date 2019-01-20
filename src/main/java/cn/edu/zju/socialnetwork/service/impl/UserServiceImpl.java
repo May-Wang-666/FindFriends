@@ -33,14 +33,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String register(RegisterUserInfo userInfo) {
-       /* String localHost = "";
-        try {
-            localHost = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            System.out.println("获取本机ip失败");
-            e.printStackTrace();
-            return "internal error";
-        }*/
         String headpic = StaticValues.defaultHeadpic;
         User newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), headpic, userInfo.getMotto(), userInfo.getSex(), userInfo.getAge(), userInfo.getXinzuo());
         userRepository.save(newUser);
@@ -59,7 +51,6 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户登录
      * 用户是否存在 → 密码是否正确
-     *
      * @param account
      * @param password
      * @return 用户不存在：user does not exist
@@ -136,7 +127,7 @@ public class UserServiceImpl implements UserService {
     // 修改个人信息
     @Override
     public String updatePersonalInfo(String account, String nickname, String sex, String xinzuo, int age, String motto) {
-        userRepository.modifyName(account, nickname, sex, xinzuo, age, motto);
+        userRepository.updateUserInfo(account, nickname, sex, xinzuo, age, motto);
         return "success";
     }
 

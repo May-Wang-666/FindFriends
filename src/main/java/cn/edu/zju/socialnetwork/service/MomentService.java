@@ -25,4 +25,10 @@ public interface MomentService {
     // 保存动态
     void saveMoment(Moment moment);
 
+    // 获取当前用户动态总条数
+    int findNumOfMyMoments(String account);
+
+    // 获取当前用户及好友动态总条数
+    int findNumOfFriendsMoments(String account);
+
 }

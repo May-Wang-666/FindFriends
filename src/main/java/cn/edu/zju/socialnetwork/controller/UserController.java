@@ -16,7 +16,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class UserController {
         System.out.println("查找好友：" + keyWord);
         String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
         List<FriendInfo> friends = userService.findFriends(keyWord, currentAccount);
-        return  friends;
+        return friends;
     }
 
     // 关注/取消关注好友
@@ -100,7 +99,11 @@ public class UserController {
         System.out.println("收到加好友请求，isDelete: " + isUnfollow);
         if (isUnfollow) {
             userService.unFollow(followedAccount, followerAccount);
+
         } else {
+            if (followedAccount.equals(followerAccount)) {
+                return "can't follow yourself";
+            }
             userService.follow(followedAccount, followerAccount);
         }
         return "success";
@@ -137,8 +140,8 @@ public class UserController {
         String xinzuo = data.get("xinzuo");
         String motto = data.get("motto");
         String ageStr = data.get("age");
-        if (ageStr == null || ageStr.equals("")){
-            response.sendError(488,"please tell me how old are you");
+        if (ageStr == null || ageStr.equals("")) {
+            response.sendError(488, "please tell me how old are you");
             return "invalid parameter";
         }
         int age = Integer.valueOf(ageStr.trim());

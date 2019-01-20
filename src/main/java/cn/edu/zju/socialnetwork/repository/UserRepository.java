@@ -13,9 +13,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends Neo4jRepository<User, Long> {
 
-    // 添加用户
-    // void save();
-
     // 根据邮箱获取用户
     User findByEmail(@Param("email")String email);
 
@@ -35,16 +32,11 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
     void modifyHeadpic(@Param("email") String email, @Param("headpic")String headpic);
 
 
-    /* 以下为暂时没有用到的函数 */
-
-    // 返回一个用户的好友列表
-    @Query("match (u:User)-[:is_friends_with]->(p:User) where u.email={email} return p")
-    List<User> findFriends(@Param("email") String email);
-
     // 修改信息
     @Query("MATCH (user:User) WHERE user.email={email} SET user.nickname = {nickname},user.sex={sex},user.age={age},user.motto={motto},user.xinzuo={xinzuo} return user")
-    User modifyName(@Param("email") String email, @Param("nickname") String nickname, @Param("sex")String sex, @Param("xinzuo")String xinzuo,@Param("age") int age, @Param("motto")String motto);
+    User updateUserInfo(@Param("email") String email, @Param("nickname") String nickname, @Param("sex")String sex, @Param("xinzuo")String xinzuo, @Param("age") int age, @Param("motto")String motto);
 
+    /* 以下为暂时没有用到的函数 */
 
     // 根据节点id获取用户
     @Query("match (n:User) where ID(n) = {id}")

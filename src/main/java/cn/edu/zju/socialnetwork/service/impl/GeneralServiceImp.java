@@ -3,8 +3,6 @@ package cn.edu.zju.socialnetwork.service.impl;
 import cn.edu.zju.socialnetwork.entity.Message;
 import cn.edu.zju.socialnetwork.entity.Moment;
 import cn.edu.zju.socialnetwork.entity.User;
-import cn.edu.zju.socialnetwork.repository.MessageRepository;
-import cn.edu.zju.socialnetwork.repository.MomentRepository;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.response.AdditionalMessage;
 import cn.edu.zju.socialnetwork.response.HomePageInfo;
@@ -127,16 +125,14 @@ public class GeneralServiceImp implements GeneralService {
         HomePageInfo info = new HomePageInfo(owner, new ArrayList<>(friends), numOfMoments, numOfMessages, additionalMoments);
         // 判断是否最后一页
         if (additionalMoments.size() <= 10){
-            info.setLastPageOfMoment(true);
+            info.setLastPage(true);
         }
-        System.out.println(info);
         return info;
     }
 
 
     /**
      * 获取用户留言板信息
-     *
      * @param ownerAccount   留言板主人账号
      * @param visitorAccount 留言板访问者账号
      * @return 有留言，List<AdditionalMessage> 没有留言，size为0的list

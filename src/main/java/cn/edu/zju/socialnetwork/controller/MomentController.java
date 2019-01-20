@@ -49,7 +49,8 @@ public class MomentController {
             publishMoment(account,content,pic);
             List<Moment> newMoments = momentService.findMomentsOfMineAndFriends(account,1);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,currentUser);
-            if (newMoments.size() < StaticValues.numInOnePage){
+            int totalMoment = momentService.findNumOfFriendsMoments(account);
+            if (totalMoment <= StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);
@@ -62,14 +63,18 @@ public class MomentController {
             String ownerAccount = data.get("ownerAccount");
             String visitorAccount = GeneralUtil.getCurrentUserFromCookie(request);
             List<Moment> newMoments;
+            int totalMoments;
             if(ownerAccount.equals(visitorAccount)){
                 newMoments = momentService.findMomentsOfMineAndFriends(ownerAccount,Integer.valueOf(pageNumber));
+                totalMoments = momentService.findNumOfFriendsMoments(ownerAccount);
             } else {
                 newMoments = momentService.findMyMoments(ownerAccount,Integer.valueOf(pageNumber));
+                totalMoments = momentService.findNumOfMyMoments(ownerAccount);
             }
             User visitor = userService.findByAccount(visitorAccount);
             List<AdditionalMoment> res = GeneralUtil.addInfoIntoMoments(newMoments,visitor);
-            if (newMoments.size() < StaticValues.numInOnePage){
+            int leftMoments = totalMoments - StaticValues.numInOnePage * Integer.valueOf(pageNumber);
+            if (leftMoments <= StaticValues.numInOnePage){
                 return new ResponseMoments(res,false);
             } else {
                 return new ResponseMoments(res,true);
