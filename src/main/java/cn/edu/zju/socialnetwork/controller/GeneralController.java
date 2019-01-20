@@ -27,9 +27,12 @@ public class GeneralController {
     GeneralService generalService;
 
     @RequestMapping(value = "/homepage",method = RequestMethod.POST)
-    public HomePageInfo homePage(@RequestBody HashMap<String,String> data, HttpServletRequest request){
+    public HomePageInfo homePage(@RequestBody HashMap<String,String> data, HttpServletRequest request, HttpServletResponse response) throws IOException {
         System.out.println(data);
         String owner = data.get("owner");
+        if (owner == null){
+            response.sendError(466,"please tell me the owner of this homepage");
+        }
         System.out.println("收到homepage请求：");
         System.out.println("主页的主人是："+owner);
         String visitor = GeneralUtil.getCurrentUserFromCookie(request);
@@ -52,15 +55,10 @@ public class GeneralController {
     // 为留言/动态 点赞/取消赞
     @RequestMapping(value = "like", method = RequestMethod.POST)
     public void like(@RequestBody HashMap<String,String> data,HttpServletRequest request, HttpServletResponse response) throws IOException {
-        System.out.println(data);
         String currentAccount = GeneralUtil.getCurrentUserFromCookie(request);
         Long itemId = Long.valueOf(data.get("id").trim());
         String type = data.get("type");
-        String isCancel = data.get("isCancel");
-        boolean isCancelb = false;
-        if (isCancel.equals("true")){
-            isCancelb = true;
-        }
+        boolean isCancelb = Boolean.parseBoolean(data.get("isCancel"));
         System.out.println("收到 "+type+" 点赞请求，isCancel: "+isCancelb);
         boolean res;
         if (isCancelb){

@@ -13,7 +13,7 @@ import java.io.IOException;
 
 
 @Order(2)
-@WebFilter(filterName = "cookieFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "EXCLUDED_PAGES", value = "/user/validemail;/user/login;")})
+@WebFilter(filterName = "cookieFilter", urlPatterns = "/*", initParams = {@WebInitParam(name = "EXCLUDED_PAGES", value = "/user/validemail;/user/login;/user/register")})
 public class CookieFilter implements Filter {
 
     private String excludedPages;

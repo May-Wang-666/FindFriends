@@ -51,7 +51,7 @@ public class RepositoriesTest extends BaseTest {
         return "http://"+localAddress+":8080/find-friends/headpics/"+randomPics[index];
     }
 
-    @Test
+    //@Test
     public void testRepositories() {
         userRepository.deleteAll();
         momentRepository.deleteAll();
@@ -89,7 +89,7 @@ public class RepositoriesTest extends BaseTest {
         userRepository.save(sl);
     }
 
-    @Test
+    //@Test
     public void addMessages(){
         User sl = userRepository.findByEmail("sl@wlws.com");
         User wlh = userRepository.findByEmail("wlh@wlws.com");
@@ -107,7 +107,7 @@ public class RepositoriesTest extends BaseTest {
         System.out.println("插入成功");
     }
 
-    @Test
+    //@Test
     public void addUser(){
         User fn = new User("123@wlws.com", "123456", "封楠小撒叽", getRandomHeadPic(), "哐哐哐", "女", 22, "天蝎座");
         userRepository.save(fn);
@@ -122,6 +122,9 @@ public class RepositoriesTest extends BaseTest {
     @Test
     public void findAllByName(){
         List<User> users = userRepository.findAllByName("朱七七");
+        for (User user:users){
+            System.out.println(user);
+        }
         System.out.println(users.size());
     }
 

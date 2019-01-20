@@ -104,9 +104,11 @@ public class GeneralServiceImp implements GeneralService {
         User owner = userService.findByAccount(ownerAccount);
         User visitor = userService.findByAccount(visitorAccount);
         // 用户的好友列表
-        Set<User> friends = owner.getFriends();
-        if (friends == null){
+        Set<User> friends;
+        if (owner.getFriends() == null){
             friends = new HashSet<>();
+        } else{
+            friends = owner.getFriends();
         }
         // 用户留言数
         int numOfMessages = userRepository.findNumOfMessages(ownerAccount);

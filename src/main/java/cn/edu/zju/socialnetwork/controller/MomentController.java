@@ -38,9 +38,9 @@ public class MomentController {
     @RequestMapping(value = "/refresh")
     public ResponseMoments momentRefresh(@RequestBody HashMap<String,String> data, HttpServletRequest request, HttpServletResponse response){
         // 发表动态
-        System.out.println(request.getMethod());
         System.out.println(data);
-        if (request.getMethod().equals(String.valueOf(RequestMethod.POST))){
+        String isPublish = data.get("isPublish");
+        if (isPublish.equals("true")){
             System.out.println("收到发表动态请求：");
             String account = GeneralUtil.getCurrentUserFromCookie(request);
             User currentUser = userService.findByAccount(account);
@@ -56,7 +56,7 @@ public class MomentController {
             }
         }
         // 请求分页动态
-        if (request.getMethod().equals(String.valueOf(RequestMethod.GET))){
+        if (isPublish.equals("false")){
             System.out.println("收到动态分页请求：");
             String pageNumber = data.get("pageNumber");
             String ownerAccount = data.get("ownerAccount");
