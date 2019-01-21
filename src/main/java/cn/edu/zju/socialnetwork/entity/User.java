@@ -28,7 +28,7 @@ public class User {
     private String xinzuo;
 
     @Relationship(value = "is_friends_with", type = Relationship.UNDIRECTED)
-    private Set<User> friends;
+    private Set<User> friends = new HashSet<>();
 
     // 收到的留言
     @Relationship(value = "have", type = Relationship.INCOMING)

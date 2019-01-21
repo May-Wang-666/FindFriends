@@ -33,7 +33,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
 
     // 修改信息
-    @Query("MATCH (user:User) WHERE user.email={email} SET user.nickname = {nickname},user.sex={sex},user.age={age},user.motto={motto},user.xinzuo={xinzuo} return user")
+    @Query("MATCH (user:User) WHERE user.email={email} SET user.name = {nickname},user.sex={sex},user.age={age},user.motto={motto},user.xinzuo={xinzuo} return user")
     User updateUserInfo(@Param("email") String email, @Param("nickname") String nickname, @Param("sex")String sex, @Param("xinzuo")String xinzuo, @Param("age") int age, @Param("motto")String motto);
 
     /* 以下为暂时没有用到的函数 */

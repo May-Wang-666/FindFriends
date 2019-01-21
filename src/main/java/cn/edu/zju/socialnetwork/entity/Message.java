@@ -27,7 +27,7 @@ public class Message {
 
     // 喜欢这个留言的人
     @Relationship(type = "liked", direction = Relationship.INCOMING)
-    private Set<User> likedBy;
+    private Set<User> likedBy = new HashSet<>();
 
 
     public Message() {

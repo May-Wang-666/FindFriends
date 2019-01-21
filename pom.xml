@@ -78,7 +78,7 @@
             <version>1.18.4</version>
         </dependency>
 
-        <!--添加servlet-api的依赖，使用war包部署这个必须要有-->
+       <!-- &lt;!&ndash;添加servlet-api的依赖，使用war包部署这个必须要有&ndash;&gt;
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-servlet-api</artifactId>
@@ -89,7 +89,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 

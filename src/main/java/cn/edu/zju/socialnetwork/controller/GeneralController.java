@@ -42,7 +42,7 @@ public class GeneralController {
 
     // 获取留言列表
     @RequestMapping(value = "/messages")
-    public ResponseMessages getMessages(@RequestBody HashMap<String,String> data, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseMessages getMessages(@RequestBody HashMap<String,String> data, HttpServletRequest request) {
         String ownerAccount = data.get("ownerAccount");
         System.out.println("收到message请求");
         // 获取当前登录的人

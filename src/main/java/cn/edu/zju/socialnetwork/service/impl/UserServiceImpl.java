@@ -127,7 +127,8 @@ public class UserServiceImpl implements UserService {
     // 修改个人信息
     @Override
     public String updatePersonalInfo(String account, String nickname, String sex, String xinzuo, int age, String motto) {
-        userRepository.updateUserInfo(account, nickname, sex, xinzuo, age, motto);
+        User user = userRepository.updateUserInfo(account, nickname, sex, xinzuo, age, motto);
+        System.out.println("修改后的资料: "+user);
         return "success";
     }
 

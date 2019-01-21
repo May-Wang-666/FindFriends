@@ -17,6 +17,7 @@ public class MyPathConfiguration implements WebMvcConfigurer {
 
         registry.addResourceHandler("/uploaded/**").addResourceLocations("file:" + env.getProperty("upload.path"));
         registry.addResourceHandler("/headpics/**").addResourceLocations("classpath:/static/headpics/");
+        registry.addResourceHandler("/happy/**").addResourceLocations("classpath:/templates/");
         registry.addResourceHandler("/momentpics/**").addResourceLocations("classpath:/momentpics/");
     }
 

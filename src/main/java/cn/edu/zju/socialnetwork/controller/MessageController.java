@@ -36,13 +36,13 @@ public class MessageController {
     // 发表留言或者请求第n页留言
     @RequestMapping(value = "/refresh")
     public ResponseMessages momentRefresh(@RequestBody HashMap<String, String> data, HttpServletRequest request) {
-        String reqMethod = request.getMethod();
+        String isPublish = data.get("isPublish").trim();
         // 发表留言
-        if (reqMethod.equals(String.valueOf(RequestMethod.POST))) {
+        if (isPublish.equals("true")) {
             System.out.println("收到发表留言请求：");
             String toAccount = data.get("toAccount");
             String text = data.get("text");
-            System.out.println("toAccount"+toAccount);
+            System.out.println("toAccount: "+toAccount);
             System.out.println("text: "+text);
             String time = String.valueOf(System.currentTimeMillis());
             String fromAccount = GeneralUtil.getCurrentUserFromCookie(request);
@@ -50,9 +50,10 @@ public class MessageController {
             return generalService.getMessagePage(toAccount, fromAccount,1);
         }
         // 分页留言
-        if (reqMethod.equals(String.valueOf(RequestMethod.GET))){
+        if (isPublish.equals("false")){
             System.out.println("收到分页留言请求：");
             String ownerAccount = data.get("ownerAccount");
+            System.out.println("留言板的主人是："+ownerAccount);
             String pageNumber = data.get("pageNumber");
             String visitorAccount = GeneralUtil.getCurrentUserFromCookie(request);
             return generalService.getMessagePage(ownerAccount,visitorAccount,Integer.valueOf(pageNumber));

@@ -47,6 +47,13 @@ public class CookieFilter implements Filter {
             return;
         }
 
+       /* // 静态资源请求，直接放行
+        if (request.getServletPath().startsWith("/happy")){
+            System.out.println("收到静态资源请求");
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }*/
+
         boolean isExcludedPage = false;
         for (String page : excludedPageArray) {// 遍历例外url数组
             // 判断当前URL是否与例外页面相同
