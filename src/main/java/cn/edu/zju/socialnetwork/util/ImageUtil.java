@@ -33,11 +33,11 @@ public class ImageUtil {
             if (!newFile.getParentFile().exists()) {
                 if (!newFile.getParentFile().mkdirs()) {
                     String res = "创建文件夹失败！";
-                    System.out.println("res");
+                    System.out.println(res);
                     return "can't make folder!";
                 }
             }
-            FileOutputStream write = new FileOutputStream(new File(path + imgName));
+            FileOutputStream write = new FileOutputStream(newFile);
             byte[] decoderBytes = Base64.getDecoder().decode(base64);
             write.write(decoderBytes);
             write.close();

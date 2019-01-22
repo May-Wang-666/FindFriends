@@ -12,11 +12,6 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 @ServletComponentScan
 @SpringBootApplication
 public class SocialnetworkApplication extends SpringBootServletInitializer {
-
-   /* @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(SocialnetworkApplication.class);
-    }*/
     public static void main(String[] args){
         SpringApplication.run(SocialnetworkApplication.class,args);
     }
