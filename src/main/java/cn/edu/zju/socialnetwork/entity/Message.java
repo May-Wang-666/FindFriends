@@ -27,15 +27,10 @@ public class Message {
 
     // 喜欢这个留言的人
     @Relationship(type = "liked", direction = Relationship.INCOMING)
-    private Set<User> likedBy;
+    private Set<User> likedBy = new HashSet<>();
 
 
     public Message() {
-    }
-
-    public Message(String text, String time) {
-        this.text = text;
-        this.time = time;
     }
 
     public Message(String text, String time, User owner) {
@@ -105,10 +100,6 @@ public class Message {
 
     public Set<User> getLikedBy() {
         return likedBy;
-    }
-
-    public void setLikedBy(Set<User> likedBy) {
-        this.likedBy = likedBy;
     }
 
     @Override

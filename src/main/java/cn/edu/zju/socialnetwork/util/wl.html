@@ -3,22 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <title>WL</title>
-    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <!-- <script src="js/bootstrap/jquery-3.3.1.min.js"></script> -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
 </head>
 <body>
+<img src="http://192.168.1.101:8080/headpics/default_headpic.png">
+
+<button onclick="ajaxRequestByJQuery()">ajax请求(JQuery)</button>
+<button onclick="ajaxRequestByJS()">ajax请求(JS)</button>
+<button onclick="fetchRequest()">fetch请求</button>
 <script>
-    $.ajax({
-        type: "post",
-        url: 'http://10.82.23.86:8080/user/login',
-        xhrFields:{withCredentials: true},
-        async: false, // 使用同步方式
-        data: JSON.stringify({"email":"sl@wlws.com","password":"123456"}),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function(data) {
-            alert(data.result);
-        }
-    });
+
+    let requrl=`http://47.100.226.85:8080/find-friends/user/login`;
+    let reqdata={"email":"sl@wlws.com","password":"123456"};
+
+    function fetchRequest() {
+        (async function () {
+            const defaultHeaders = {
+                'Accept': 'text/html,application/json',
+                'Content-Type': 'application/json'
+            };
+            let req = new Request(requrl, {
+                method: "POST",
+                headers: defaultHeaders,
+                body: JSON.stringify(reqdata),
+                credentials: 'include'
+            });
+
+            const res = await fetch(req);
+            const dataset = await res.json();
+            console.log(dataset);
+        })();
+    }
+
+    // 需要引入JQuery
+    function ajaxRequestByJQuery() {
+        $.ajax({
+            type: "post",
+            url: requrl,
+            xhrFields:{withCredentials: true},
+            async: true, // 使用同步方式
+            data: JSON.stringify(reqdata),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function() {
+                console.log("JQuery Ajax 请求成功！");
+            }
+        });
+    }
+
+    function ajaxRequestByJS(){
+
+        // 1. 创建请求对象
+        let xmlHttp=new XMLHttpRequest();
+        // 2. 注册回调函数
+        xmlHttp.onreadystatechange=function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status==200){
+                console.log("JS Ajax 请求成功！");
+                let res=xmlHttp.responseText;
+                console.log(res);
+            }
+        };
+        // 3. 配置请求信息
+        xmlHttp.open("POST",requrl);
+        xmlHttp.setRequestHeader("Content-Type","application/json; charset=utf-8");
+        xmlHttp.withCredentials=true;
+        // 4. 发送请求
+        xmlHttp.send(JSON.stringify(reqdata));
+
+    }
+
 </script>
 </body>
 </html>

@@ -1,16 +1,23 @@
 package cn.edu.zju.socialnetwork.service.impl;
 
+import cn.edu.zju.socialnetwork.entity.Message;
 import cn.edu.zju.socialnetwork.entity.Moment;
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
+import cn.edu.zju.socialnetwork.response.AdditionalMessage;
 import cn.edu.zju.socialnetwork.response.HomePageInfo;
-import cn.edu.zju.socialnetwork.response.MomentWithLike;
+import cn.edu.zju.socialnetwork.response.AdditionalMoment;
+import cn.edu.zju.socialnetwork.response.ResponseMessages;
 import cn.edu.zju.socialnetwork.service.GeneralService;
+import cn.edu.zju.socialnetwork.service.MessageService;
+import cn.edu.zju.socialnetwork.service.MomentService;
+import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,14 +27,67 @@ public class GeneralServiceImp implements GeneralService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    MomentService momentService;
+
+    @Autowired
+    MessageService messageService;
+
+    /**
+     * 给动态/留言点赞
+     *
+     * @param userAccount 点赞用户
+     * @param itemId      点赞对象的id
+     * @param type        moment / message
+     * @return id不存在，false，否则，true
+     */
     @Override
     public Boolean like(String userAccount, Long itemId, String type) {
-        return null;
+        User currentUser = userService.findByAccount(userAccount);
+        if (type.equals("moment")) {
+            Moment moment = momentService.findMomentById(itemId);
+            if (moment == null) {
+                System.out.println("id 为 " + itemId + "的 " + type + " 不存在");
+                return false;
+            }
+            moment.likedByUser(currentUser);
+            momentService.saveMoment(moment);
+        } else if (type.equals("message")) {
+            Message message = messageService.findMessageById(itemId);
+            if (message == null) {
+                System.out.println("id 为 " + itemId + "的 " + type + " 不存在");
+                return false;
+            }
+            message.likedByUser(currentUser);
+            messageService.saveMessage(message);
+        }
+        return true;
     }
 
+    // 取消动态/留言点赞
     @Override
     public Boolean cancelLike(String userAccount, Long itemId, String type) {
-        return null;
+        if (type.equals("moment")) {
+            Moment moment = momentService.findMomentById(itemId);
+            if (moment == null) {
+                System.out.println("id 为 " + itemId + "的 " + type + " 不存在");
+                return false;
+            }
+            moment.cancledLikeBy(userAccount);
+            momentService.saveMoment(moment);
+        } else if (type.equals("message")) {
+            Message message = messageService.findMessageById(itemId);
+            if (message == null) {
+                System.out.println("id 为 " + itemId + "的 " + type + " 不存在");
+                return false;
+            }
+            message.cancledLikeBy(userAccount);
+            messageService.saveMessage(message);
+        }
+        return true;
     }
 
     /**
@@ -40,10 +100,15 @@ public class GeneralServiceImp implements GeneralService {
      */
     @Override
     public HomePageInfo getHomePage(String ownerAccount, String visitorAccount) {
-        User owner = userRepository.findByEmail(ownerAccount);
-        User visitor = userRepository.findByEmail(visitorAccount);
+        User owner = userService.findByAccount(ownerAccount);
+        User visitor = userService.findByAccount(visitorAccount);
         // 用户的好友列表
-        Set<User> friends = owner.getFriends();
+        Set<User> friends;
+        if (owner.getFriends() == null) {
+            friends = new HashSet<>();
+        } else {
+            friends = owner.getFriends();
+        }
         // 用户留言数
         int numOfMessages = userRepository.findNumOfMessages(ownerAccount);
         // 用户本人动态数
@@ -52,32 +117,36 @@ public class GeneralServiceImp implements GeneralService {
         List<Moment> moments;
         // 如果是用户本人访问本人的主页，可以看到所有好友动态
         if (ownerAccount.equals(visitorAccount)) {
-            moments = userRepository.findFriendsMoments(ownerAccount,1);
+            moments = momentService.findMomentsOfMineAndFriends(ownerAccount, 1);
         } else {
-            moments = userRepository.findMyMoments(ownerAccount,1);
+            moments = momentService.findMyMoments(ownerAccount, 1);
         }
         // 判断访问者是否对显示的每条动态点赞，访问者可以是owner本身
-        List<MomentWithLike> momentWithLikes = new ArrayList<>();
-        if(moments != null && moments.size() != 0){
-            for (Moment moment : moments) {
-                MomentWithLike rm = new MomentWithLike(moment.getId(), moment.getOwner().getName(), moment.getOwner().getHeadpic(), moment.getContent(), moment.getTime(), moment.getPic());
-                Set<User> likedUsers = moment.getLikedBy();
-                if (likedUsers != null && likedUsers.size() != 0) {
-                    rm.setLike(likedUsers.size());
-                    if (GeneralUtil.isIn(likedUsers, visitor)){
-                        rm.setLiked(true);
-                    }
-                }
-                momentWithLikes.add(rm);
-            }
-        }
-
-        HomePageInfo info = new HomePageInfo(owner, new ArrayList<>(friends), numOfMoments, numOfMessages, momentWithLikes);
+        List<AdditionalMoment> additionalMoments = GeneralUtil.addInfoIntoMoments(moments, visitor);
+        HomePageInfo info = new HomePageInfo(owner, new ArrayList<>(friends), numOfMoments, numOfMessages, additionalMoments);
         // 判断是否最后一页
-        if (momentWithLikes.size() <= 10){
-            info.setLastPageOfMoment(true);
+        if (additionalMoments.size() <= 10) {
+            info.setLastPage(true);
         }
-        System.out.println(info);
         return info;
+    }
+
+
+    /**
+     * 获取用户留言板信息
+     *
+     * @param ownerAccount   留言板主人账号
+     * @param visitorAccount 留言板访问者账号
+     * @return 有留言，List<AdditionalMessage> 没有留言，size为0的list
+     */
+    @Override
+    public ResponseMessages getMessagePage(String ownerAccount, String visitorAccount, int pageNumber) {
+        User owner = userService.findByAccount(ownerAccount);
+        User visitor = userService.findByAccount(visitorAccount);
+        List<Message> messages = messageService.findMessagesByAccount(ownerAccount, pageNumber);
+        int totalMessage = messageService.findTotalMessageByAccount(ownerAccount);
+        System.out.println("留言数：" + totalMessage);
+        List<AdditionalMessage> additionalMessages = GeneralUtil.addInfoIntoMessages(messages, owner, visitor);
+        return new ResponseMessages(owner.getName(), owner.getHeadpic(), additionalMessages, totalMessage);
     }
 }

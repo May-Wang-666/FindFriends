@@ -1,19 +1,20 @@
 package cn.edu.zju.socialnetwork.service.impl;
 
-import cn.edu.zju.socialnetwork.entity.Message;
 import cn.edu.zju.socialnetwork.entity.User;
 import cn.edu.zju.socialnetwork.repository.UserRepository;
 import cn.edu.zju.socialnetwork.request.RegisterUserInfo;
-import cn.edu.zju.socialnetwork.response.MessageWithLike;
-import cn.edu.zju.socialnetwork.response.ResponseMessages;
+import cn.edu.zju.socialnetwork.response.FriendInfo;
 import cn.edu.zju.socialnetwork.service.UserService;
 import cn.edu.zju.socialnetwork.util.GeneralUtil;
+import cn.edu.zju.socialnetwork.util.ImageUtil;
+import cn.edu.zju.socialnetwork.util.StaticValues;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,27 +22,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private String defaultHeadpic = "/headpics/default_headpic.png";
+    @Autowired
+    private Environment env;
 
 
     /**
      * 用户注册
-     *
      * @param userInfo 传进的参数
      * @return
      */
     @Override
     public String register(RegisterUserInfo userInfo) {
-        String account = userInfo.getEmail();
-        String localHost = "";
-        try {
-            localHost = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            System.out.println("获取本机ip失败");
-            e.printStackTrace();
-            return "internal error";
-        }
-        String headpic = "http://" + localHost + ":8080" + defaultHeadpic;
+        String headpic = StaticValues.defaultHeadpic;
         User newUser = new User(userInfo.getEmail(), userInfo.getPassword(), userInfo.getNickname(), headpic, userInfo.getMotto(), userInfo.getSex(), userInfo.getAge(), userInfo.getXinzuo());
         userRepository.save(newUser);
         return "success";
@@ -59,7 +51,6 @@ public class UserServiceImpl implements UserService {
     /**
      * 用户登录
      * 用户是否存在 → 密码是否正确
-     *
      * @param account
      * @param password
      * @return 用户不存在：user does not exist
@@ -77,33 +68,80 @@ public class UserServiceImpl implements UserService {
         return user.getEmail();
     }
 
-
     /**
-     * 获取用户留言板信息
-     *
-     * @param ownerAccount   留言板主人账号
-     * @param visitorAccount 留言板访问者账号
-     * @return 有留言，List<MessageWithLike> 没有留言，size为0的list
+     * 根据用户名/用户邮箱查找用户
+     * @param keyWord
+     * @return
      */
     @Override
-    public ResponseMessages getMessages(String ownerAccount, String visitorAccount) {
-        User visitor = userRepository.findByEmail(visitorAccount);
-        List<Message> messages = userRepository.findMessages(ownerAccount,1);
-        int totalMessage = userRepository.findNumOfMessages(ownerAccount);
-        System.out.println("留言数：" + totalMessage);
-        List<MessageWithLike> messageWithLikes = new ArrayList<>();
-        if (messages.size() != 0) {
-            for (Message m : messages) {
-                User messageOwner = m.getOwner();
-                MessageWithLike rm = new MessageWithLike(m.getId(), messageOwner.getName(), messageOwner.getHeadpic(), m.getText(), m.getTime());
-                Set<User> likedUsers = m.getLikedBy();
-                if (likedUsers != null && likedUsers.size() != 0) {
-                    rm.setLike(likedUsers.size());
-                    rm.setLiked(GeneralUtil.isIn(likedUsers, visitor));
-                }
-                messageWithLikes.add(rm);
+    public List<FriendInfo> findFriends(String keyWord, String currentAccount) {
+        List<User> res = new ArrayList<>();
+        User byEmail = findByAccount(keyWord);
+        if (byEmail != null) {
+            res.add(byEmail);
+        }
+        List<User> byName = findByName(keyWord);
+        if (byName != null && byName.size() != 0) {
+            res.addAll(byName);
+        }
+        // 返回查找到的用户信息
+        List<FriendInfo> friendInfos = new ArrayList<>();
+        if (res.size() != 0) {
+            User currentUser = userRepository.findByEmail(currentAccount);
+            Set<User> myFriends = currentUser.getFriends();
+            for (User user : res) {
+                FriendInfo info = new FriendInfo(user.getEmail(), user.getName(), user.getHeadpic());
+                info.setFriends(GeneralUtil.isIn(myFriends, user));
+                friendInfos.add(info);
             }
         }
-        return new ResponseMessages(messageWithLikes,totalMessage);
+        return friendInfos;
     }
+
+    // 关注用户
+    @Override
+    public void follow(String followedAccount, String followerAccount) {
+        User followed = userRepository.findByEmail(followedAccount);
+        User follwer = userRepository.findByEmail(followerAccount);
+        follwer.follow(followed);
+        userRepository.save(follwer);
+    }
+
+    // 取消关注
+    @Override
+    public void unFollow(String followedAccount, String followerAccount) {
+        User followed = userRepository.findByEmail(followedAccount);
+        User follwer = userRepository.findByEmail(followerAccount);
+        follwer.unFollow(followed);
+        userRepository.save(follwer);
+    }
+
+    // 修改用户头像
+    @Override
+    public String modifyHeadPic(String account, String dataURL) {
+        String newPicURL = ImageUtil.saveBase64Image(dataURL, env.getProperty("upload.path"));
+        userRepository.modifyHeadpic(account, newPicURL);
+        return newPicURL;
+    }
+
+    // 修改个人信息
+    @Override
+    public String updatePersonalInfo(String account, String nickname, String sex, String xinzuo, int age, String motto) {
+        User user = userRepository.updateUserInfo(account, nickname, sex, xinzuo, age, motto);
+        System.out.println("修改后的资料: "+user);
+        return "success";
+    }
+
+
+    // 根据邮箱查找用户/获取用户个人信息
+    @Override
+    public User findByAccount(String account) {
+        return userRepository.findByEmail(account);
+    }
+
+    @Override
+    public List<User> findByName(String name) {
+        return userRepository.findAllByName(name);
+    }
+
 }

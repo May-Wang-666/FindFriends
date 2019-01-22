@@ -28,7 +28,7 @@ public class User {
     private String xinzuo;
 
     @Relationship(value = "is_friends_with", type = Relationship.UNDIRECTED)
-    private Set<User> friends;
+    private Set<User> friends = new HashSet<>();
 
     // 收到的留言
     @Relationship(value = "have", type = Relationship.INCOMING)
@@ -67,6 +67,24 @@ public class User {
     public void makeFriendsWith(User user) {
         friends.add(user);
         user.getFriends().add(this);
+    }
+
+    // 单方面加好友，关注功能
+    public void follow(User user){
+        friends.add(user);
+    }
+
+    // 取消关注
+    public void unFollow(User user){
+        Iterator<User> iterator = friends.iterator();
+        while (iterator.hasNext()){
+            User tmp = iterator.next();
+            if (tmp.getId() == user.getId()){
+                iterator.remove();
+                break;
+            }
+        }
+        System.out.println("您还没有关注 "+user.getEmail());
     }
 
     // 获得一个留言
@@ -135,6 +153,9 @@ public class User {
     }
 
     public Set<User> getFriends() {
+        if (friends == null){
+            return new HashSet<>();
+        }
         return friends;
     }
 

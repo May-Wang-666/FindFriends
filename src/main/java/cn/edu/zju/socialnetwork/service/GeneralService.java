@@ -2,6 +2,7 @@ package cn.edu.zju.socialnetwork.service;
 
 
 import cn.edu.zju.socialnetwork.response.HomePageInfo;
+import cn.edu.zju.socialnetwork.response.ResponseMessages;
 
 public interface GeneralService {
 
@@ -19,5 +20,8 @@ public interface GeneralService {
 
     // 获取主页信息
     HomePageInfo getHomePage(String ownerAccount,String visitorAccount);
+
+    // 获取留言主页信息
+    ResponseMessages getMessagePage(String ownerAccount, String visitorAccount,int pageNumber);
 
 }
