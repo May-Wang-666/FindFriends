@@ -69,5 +69,5 @@ public class GeneralController {
         if (res == false){
             response.sendError(499,"no "+type + "has id "+itemId);
         }
-    }
+    }  
 }
