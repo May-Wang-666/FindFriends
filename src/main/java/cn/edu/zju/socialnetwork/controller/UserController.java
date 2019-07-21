@@ -60,6 +60,7 @@ public class UserController {
             Cookie cookie = new Cookie("loginAccount", email);
             cookie.setMaxAge(60 * 60 * 24); //有效期，一天
             cookie.setPath("/");
+            cookie.setHttpOnly(true);
             response.addCookie(cookie);
             System.out.println("添加cookie成功");
         }

@@ -23,7 +23,7 @@ public interface MessageRepository extends Neo4jRepository<Message, Long> {
     List<Message> findMessagesByAccount(@Param("email") String email, int pageNumber);*/
 
 
-    // 获取某个用户留言的分页接口
+    // 获取某个用户当前页的留言
     @Query("match p= (u:User)-[:have]->(m:Message) where u.email ={email} " +
             "with p,m order by m.time desc skip {skip} limit {limit} " +
             "match (lvu:User)-[lv:leaves]->(m) " +

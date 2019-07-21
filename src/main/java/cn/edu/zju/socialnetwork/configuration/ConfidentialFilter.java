@@ -30,7 +30,7 @@ public class ConfidentialFilter implements Filter {
         // 允许发送和接收cookie
         response.setHeader("Access-Control-Allow-Credentials","true");
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
-//        System.out.println(request.getHeader("Origin"));
+        System.out.println(request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
         response.setHeader("Access-Control-Expose-Headers","loginAccount");

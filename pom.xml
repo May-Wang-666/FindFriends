@@ -27,7 +27,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-neo4j</artifactId>
         </dependency>
-      <dependency>
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
         </dependency>
@@ -74,18 +74,18 @@
             <version>1.18.4</version>
         </dependency>
 
-       <!-- &lt;!&ndash;添加servlet-api的依赖，使用war包部署这个必须要有&ndash;&gt;
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-servlet-api</artifactId>
-            <version>8.0.36</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>-->
+        <!-- &lt;!&ndash;添加servlet-api的依赖，使用war包部署这个必须要有&ndash;&gt;
+         <dependency>
+             <groupId>org.apache.tomcat</groupId>
+             <artifactId>tomcat-servlet-api</artifactId>
+             <version>8.0.36</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-starter-tomcat</artifactId>
+             <scope>provided</scope>
+         </dependency>-->
 
     </dependencies>
 
